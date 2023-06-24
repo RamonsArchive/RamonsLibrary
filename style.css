@@ -1,0 +1,132 @@
+
+body{
+    background-color: rgb(158, 159, 222);
+    justify-content: center;
+    font-family: 'Quicksand', sans-serif;
+    display: flex;
+    min-height: 100vh;
+    padding-bottom: 200px;
+    align-items: center;
+    border:.5px solid plum;
+    box-shadow: 0 2px 100px black;
+}
+
+#main{
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    width: 500px;
+    height: 500px;
+}
+
+#demographics{
+
+}
+
+.musicPlayer{
+    position: relative;
+    align-items: center;
+    display: relative;
+    justify-content: center;
+    margin-bottom: 200px;
+    width: 500px;
+    height: 500px;
+}
+#songControls{
+   
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+}
+#positionControls{
+    display: relative;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    margin-top: 200px;
+    width: 550px;
+}
+
+#volumeControls{
+    height: 0px;
+    margin-left: 500px;
+    position: absolute;
+    align-items: center;
+    display: center;
+    margin-bottom: 175px;
+
+}
+
+.demographics{
+    position: flex;
+    width: 500px;
+}
+
+.songInfo{
+    position: absolute;
+    width: 400px;
+}
+#volumeSlider{
+    -webkit-appearance: slider-vertical;
+    width: 20px;
+    height: 125px;
+    margin-left: 20px;
+    justify-content: center;
+    cursor: pointer;
+}
+#positionSlider{
+    width: 400px;
+    cursor: pointer;
+}
+#commandButtons{
+    justify-content: center;
+    display: flex;
+}
+#mute{
+    position: relative;
+    justify-content: center;
+    cursor: pointer;
+}
+
+#artistName{
+    position:relative;
+    align-items: center;
+    font-family: 'Quicksand', sans-serif;
+    justify-content: center;
+    font-size: 25px;
+}
+
+#songTitle{
+    position: relative;
+    align-items: center;
+    display: center;
+    justify-content: center;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 40px;
+    margin-bottom: 50px;
+}
+#songCover{
+    border: 1px solid white;
+    border-radius: 3%;
+    box-shadow: 0 10px 40px black;
+}
+
+.useBtn{
+    width: 50px;
+    height: 20px;
+    border: 3px;
+    border-radius: 12px;
+    align-items: center;
+    margin: 3px;
+    cursor: pointer;
+    border: .10px solid lightslategrey;
+    background-color: rgb(158, 170, 222);
+    box-shadow: 0 10px 70px black;
+
+    cursor: pointer;
+    font-family: 'Quicksand', sans-serif;
+}
+
+
+
