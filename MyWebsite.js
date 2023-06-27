@@ -17,6 +17,7 @@ let constantVolume;
 let issongSelected = false;
 
 let isprevSong = false;
+let isautoPlay = false;
 let prevSong = 0;
 let prevSongList = [""];
 let prevCoverList = [""];
@@ -30,15 +31,29 @@ let getButton = document.getElementById("myButton");
 let getMute = document.getElementById("mute");
 let getPrev = document.getElementById("prevSong")
 let getImage = document.getElementById("songCover");
+let getautoPlay = document.getElementById("autoplay");
 let getartistName = document.getElementById("artistName");
 let getTitle = document.getElementById("songTitle");
 let getIcon = getButton.querySelector(".fa-play");
 let getvolumeIcon = getMute.querySelector(".fa-volume-high");
+let getautoPlayIcon = getautoPlay.querySelector(".fa-shuffle");
 
 getButton.addEventListener("click",play);
 skipSong.addEventListener("click",skip);
 getMute.addEventListener("click",muteSong);
-getPrev.addEventListener("click",playprevSong);
+getPrev.addEventListener("click",playprevSong); 
+getautoPlayIcon.addEventListener("click", () => {
+    if (getautoPlayIcon.classList.contains("fa-shuffle")){
+        getautoPlayIcon.classList.replace("fa-shuffle","fa-rotate-left");
+        isautoPlay = true;
+        rotatesongIndex = prevSongList.length -1;
+    }
+    else{
+        getautoPlayIcon.classList.replace("fa-rotate-left","fa-shuffle");
+        isautoPlay = false;
+        rotatesongIndex = 0;
+    }
+})
 
 class AudioPlayer{
     constructor(title,artist,songID,cover){
@@ -57,10 +72,10 @@ let song2 = new AudioPlayer("300 shots", "Sha Ek","MusicWebsite/300 Shots.mp3","
 let song3 = new AudioPlayer("300FLOCKA SHOT","Yus Gz,Sha Gzz,Nesty Gzz","MusicWebsite/300FLOCKA SHOT.mp3","AlbumCovers/artwork (copy 3).jpg");
 let song4 = new AudioPlayer("4148 (feat. Edot Babyy)","DD Osama,Edot Babyy,Lawsy","MusicWebsite/4148 (feat. Edot Babyy).mp3","AlbumCovers/artwork (copy 4).jpg");
 let song5 = new AudioPlayer("AFRICAN DEMONS PT2","Yus Gz,Scotty 2 Hotty,Nesty Floxks,Ab Da Jet","MusicWebsite/AFRICAN DEMONS PT2.mp3","AlbumCovers/artwork (copy 5).jpg");
-let song6 = new AudioPlayer("B-Lovee - Freestyle - Open Mic","DJ Smallz,Studio Of Legends,B-Lovee","MusicWebsite/B-Lovee - Freestyle - Open Mic.mp3","AlbumCovers/artwork (copy 6).jpg");
+let song6 = new AudioPlayer("B-Lovee - Freestyle - Open Mic","DJ Smallz,Studio Of Legends,B-Lovee","B-lovee","MusicWebsite/B-Lovee - Freestyle - Open Mic.mp3","AlbumCovers/artwork (copy 6).jpg");
 let song7 = new AudioPlayer("BACKDOOR","Yus Gz","MusicWebsite/BACKDOOR.mp3","AlbumCovers/artwork (copy 7).jpg");
-let song8 = new AudioPlayer("Beam","Kyle Richh,Mike Myerzz","AlbumCovers/artwork (copy 8).jpg","AlbumCovers/artwork (copy 8).jpg");
-let song9 = new AudioPlayer("Big Time Rush","BigKayBeezy","MusicWebsite/Big Time Rush.mp3","AlbumCovers/artwork (copy 10).jpg");
+let song8 = new AudioPlayer("Beam","Kyle Richh,Mike Myerzz","","AlbumCovers/artwork (copy 8).jpg");
+let song9 = new AudioPlayer("Big Time Rush","BigKayBeezy","MusicWebsite/Big Time Rush.mp3","AlbumCovers/artwork (copy 9).jpg");
 let song10 = new AudioPlayer("Box","Sha EK,Defiant Presents","MusicWebsite/Box.mp3","AlbumCovers/artwork (copy 10).jpg");
 let song11 = new AudioPlayer("BREAKIN THE CODE","Kyle Richh","MusicWebsite/BREAKIN THE CODE.mp3","AlbumCovers/artwork (copy 11).jpg","AlbumCovers/artwork (copy 11).jpg");
 let song12 = new AudioPlayer("Bussin Oota's","Roscoe G,DudeyLo","MusicWebsite/Bussin Oota's.mp3","AlbumCovers/artwork (copy 12).jpg");
@@ -70,7 +85,7 @@ let song15 = new AudioPlayer("Coe Pt. 2","justn,Sha EK,B-Lovee,150 Entertainment
 let song16 = new AudioPlayer("Cuz We Did","41,TaTa,Kyle Richh","MusicWebsite/Cuz We Did.mp3","AlbumCovers/artwork (copy 16).jpg");
 let song17 = new AudioPlayer("Demon","Nas Ebk,Set Da Trend","MusicWebsite/Demon.mp3","AlbumCovers/artwork (copy 17).jpg");
 let song18 = new AudioPlayer("Dreams","Yus Gz","MusicWebsite/Dreams.mp3","AlbumCovers/artwork (copy 18).jpg");
-let song19 = new AudioPlayer("Dyin 2 Live Pt 2","Blockwork","AlbumCovers/artwork (copy 19).jpg","AlbumCovers/artwork (copy 19).jpg");
+let song19 = new AudioPlayer("Dyin 2 Live Pt 2","Blockwork","MusicWebsite/Dyin 2 Live Pt 2.mp3","AlbumCovers/artwork (copy 19).jpg");
 let song20 = new AudioPlayer("EBK","Dudey Lo","MusicWebsite/EBK.mp3","AlbumCovers/artwork (copy 20).jpg");
 let song21 = new AudioPlayer("FLOCK AT THE FLOCKAS","SugarHill Keem","MusicWebsite/FLOCK AT THE FLOCKAS.mp3","AlbumCovers/artwork (copy 21).jpg");
 let song22 = new AudioPlayer("Fourth To The Duece","Moreno 157,Mdot Ebk,Eddie Gzz","MusicWebsite/Fourth To The Duece.mp3","AlbumCovers/artwork (copy 22).jpg");
@@ -118,20 +133,20 @@ let song63 = new AudioPlayer("Throw A Few","DJ MotionFetti,Sdot Go.","MusicWebsi
 let song64 = new AudioPlayer("Villain","Kenzo Balla","MusicWebsite/Villain.mp3","AlbumCovers/artwork (copy 64).jpg");
 let song65 = new AudioPlayer("Wait for You","JayKlickin,DD Osama","MusicWebsite/Wait for You.mp3","AlbumCovers/artwork (copy 65).jpg");
 let song66 = new AudioPlayer("Wanna See Me","Say Drilly","MusicWebsite/Wanna See Me.mp3","AlbumCovers/artwork (copy 66).jpg");
-let song67 = new AudioPlayer("WHERE ARE YOU NOW","Edot Babyy","","MusicWebsite/WHERE ARE YOU NOW.mp3","AlbumCovers/artwork (copy 67).jpg");
+let song67 = new AudioPlayer("WHERE ARE YOU NOW","Edot Babyy","MusicWebsite/WHERE ARE YOU NOW.mp3","AlbumCovers/artwork (copy 67).jpg");
 let song68 = new AudioPlayer("Who Punchin'","Sha EK","MusicWebsite/Who Punchin'.mp3","AlbumCovers/artwork (copy 68).jpg");
 let song69 = new AudioPlayer("Who you","Jb sleeze","MusicWebsite/Who you.mp3","AlbumCovers/artwork (copy 69).jpg");
 let song70 = new AudioPlayer("Without You","DD Osama,Notti Osama","MusicWebsite/Without You.mp3","AlbumCovers/artwork (copy 70).jpg");
 let song71 = new AudioPlayer("Wonder [OTR FREESTYLE] (feat. Rayy Balla)","MusicWebsite/Wonder [OTR FREESTYLE] (feat. Rayy Balla).mp3","MusicWebsite/Wonder [OTR FREESTYLE] (feat. Rayy Balla).mp3","AlbumCovers/artwork (copy 71).jpg")
 let song72 = new AudioPlayer("30","Kyle Rich Billz","MusicWebsite/30.mp3","AlbumCovers/artwork (copy 139).jpg"); // artwork 139 
-let song73 = new AudioPlayer("41 Bop","TaTa,Dee Billz,Jenn Carter,Kyle Richh,Jay Gelato,Miah Kenzo","AlbumCovers/artwork (copy 72).jpg");
+let song73 = new AudioPlayer("41 Bop","TaTa,Dee Billz,Jenn Carter,Kyle Richh,Jay Gelato,Miah Kenzo","MusicWebsite/41 Bop.mp3","AlbumCovers/artwork (copy 72).jpg");
 let song74 = new AudioPlayer("41 CYPHER","TaTa,Jenn Carter,Dee Billz,Jerry West,Jay Gelato,FMB Savo,Kyle Richh","MusicWebsite/41 CYPHER.mp3","AlbumCovers/artwork (copy 73).jpg");
 
 // new songs
 let song75 = new AudioPlayer("700 DOAK","Bucky B,Blitz Gz","MusicWebsite/700 DOAK.mp3","AlbumCovers/artwork (copy 117).jpg");
 let song76 = new AudioPlayer("Act Bad","B-Lovee,2Rare","MusicWebsite/Act Bad.mp3","AlbumCovers/artwork (copy 118).jpg");
 let song77 = new AudioPlayer("AYO BRI REMIX","SugarHill Keem,Oy Quan","MusicWebsite/AYO BRI REMIX.mp3","AlbumCovers/artwork (copy 119).jpg");
-let song78 = new AudioPlayer("back to back ddosama","Shonentobii","MusicWebsite/back to back ddosama.mp3","AlbumCovers/artwork (copy 120).jpg");
+let song78 = new AudioPlayer("back to back","DD Osama","MusicWebsite/back to back ddosama.mp3","AlbumCovers/artwork (copy 120).jpg");
 let song79 = new AudioPlayer("Beat the Odds","Sha EK","MusicWebsite/Beat the Odds.mp3","AlbumCovers/artwork (copy 121).jpg");
 let song80 = new AudioPlayer("Being Honest","Kay Flock","MusicWebsite/Being Honest.mp3","AlbumCovers/artwork (copy 122).jpg");
 let song81 = new AudioPlayer("Bestie","Ndotspinalot","MusicWebsite/Bestie.mp3","AlbumCovers/artwork (copy 123).jpg");
@@ -146,13 +161,13 @@ let song89 = new AudioPlayer("E4N","Edot Babyy,Sugarhill Ddot,DD Osama,Dudeylo,R
 let song91 = new AudioPlayer("Eater","917 Rackz,Sdot Go,Jay Hound","MusicWebsite/Eater.mp3","AlbumCovers/artwork (copy 132).jpg");
 let song92 = new AudioPlayer("Feel The Rage","Kenzo Balla","MusicWebsite/Feel The Rage.mp3","AlbumCovers/artwork (copy 133).jpg");
 let song93 = new AudioPlayer("Finish The War","Edot Babyy,Sha EK","MusicWebsite/Finish The War.mp3","AlbumCovers/artwork (copy 134).jpg");
-let song94 = new AudioPlayer("Flame Em","brennannocap,Jo Bandzz,Kay FIock,Setty B","MusicWebsite/Feel The Rage.mp3","AlbumCovers/artwork (copy 135).jpg");
+let song94 = new AudioPlayer("Flame Em","brennannocap,Jo Bandzz,Kay FIock,Setty B","MusicWebsite/Flame Em.mp3","AlbumCovers/artwork (copy 135).jpg");
 let song95 = new AudioPlayer("Free Rico","Q Da Fool","MusicWebsite/Free Rico.mp3","AlbumCovers/artwork (copy 136).jpg");
 let song96 = new AudioPlayer("FTH","B-Lovee","MusicWebsite/FTH.mp3","AlbumCovers/artwork (copy 137).jpg");
 let song97 = new AudioPlayer("Good riddance","Fr33bandit,Quelly Woo","MusicWebsite/Good riddance.mp3","AlbumCovers/artwork (copy 138).jpg");
 // completes loop with music start at 99
 let song98 = new AudioPlayer("Hazard Lights","Sdot Go","MusicWebsite/Sdot Go (GOMD).mp3","AlbumCovers/artwork (copy 99).jpg");
-let song99 = new AudioPlayer("Heartless (featuring Ray Balla & Hunta)","MusicWebsite/Heartless (featuring Ray Balla & Hunta).mp3","AlbumCovers/artwork (copy 100).jpg");
+let song99 = new AudioPlayer("Heartless (featuring Ray Balla & Hunta)","TG Crippy, Kenzo Balla, Ray Balla, Hunta","MusicWebsite/Heartless (featuring Ray Balla & Hunta).mp3","AlbumCovers/artwork (copy 100).jpg");
 let song100 = new AudioPlayer("Hollows","Sdot Go,Jay Hound,NazGPG","MusicWebsite/Hollows.mp3","AlbumCovers/artwork (copy 101).jpg");
 let song101= new AudioPlayer("I Can't Help It (feat. B-Lovee)","Wan Billz,B-Lovee","MusicWebsite/I Can't Help It (feat. B-Lovee).mp3","AlbumCovers/artwork (copy 102).jpg");
 let song102= new AudioPlayer("In My Moods","Kenzo Balla","MusicWebsite/In My Moods.mp3","AlbumCovers/artwork (copy 103).jpg");
@@ -169,33 +184,84 @@ let song111= new AudioPlayer("Mixed Emotions","keem gtfm,TG Flocka","MusicWebsit
 let song112= new AudioPlayer("My Type Of Time","Kenzo Balla","MusicWebsite/My Type Of Time.mp3","AlbumCovers/artwork (copy 114).jpg");
 let song113 = new AudioPlayer("Numb (unreleased)","Say Drilly","MusicWebsite/Say Drilly - Numb (Unreleased).mp3","AlbumCovers/artwork (copy 140).jpg")
 let song114 = new AudioPlayer("Dead Game PT.2","Say Drilly X Mdot EBK X Ewuu X La X DG Karti X Melo","MusicWebsite/Say Drilly X Mdot EBK X Ewuu X La X DG Karti X Melo - Dead Game PT.2 (Official Music Video) KJShotIt.mp3","AlbumCovers/artwork (copy 141).jpg")
+let song115 = new AudioPlayer("Rosa","Shaa Gz","MusicWebsite/Rosa.mp3","AlbumCovers/artwork (copy 142).jpg");
+let song116 = new AudioPlayer("Shot in the Party","Sha EK","MusicWebsite/Shot in the Party.mp3","AlbumCovers/artwork (copy 143).jpg");
+let song117 = new AudioPlayer("Show Me Love","Lee Drilly","MusicWebsite/Show Me Love.mp3","AlbumCovers/artwork (copy 144).jpg");
+let song118 = new AudioPlayer("So Into You","Lee Drilly","MusicWebsite/So Into You.mp3","AlbumCovers/artwork (copy 145).jpg");
+let song119 = new AudioPlayer("Spin Back","Christian Cartier,Jay Hound","MusicWebsite/Spin Back.mp3","AlbumCovers/artwork (copy 146).jpg");
+let song120 = new AudioPlayer("Spin Thru The Mitch","41, Kyle Richh, Jenn Carter","MusicWebsite/Spin Thru The Mitch.mp3","AlbumCovers/artwork (copy 147).jpg");
+let song121 = new AudioPlayer("Taking That Risk","Yus Gz","MusicWebsite/Taking That Risk.mp3","AlbumCovers/artwork (copy 148).jpg");
+let song122 = new AudioPlayer("Taking That Trip","Lee Drilly,E-Wuu","MusicWebsite/Taking That Risk.mp3","AlbumCovers/artwork (copy 149).jpg")
+let song123 = new AudioPlayer("Talk To Me","Kay FIock","MusicWebsite/Talk To Me.mp3","AlbumCovers/artwork (copy 150).jpg");
+let song124 = new AudioPlayer("The One","Lee Drilly","MusicWebsite/The One.mp3","AlbumCovers/artwork (copy 151).jpg");
+let song125 = new AudioPlayer("Too Easy","BBG Steppaa","MusicWebsite/Too Easy.mp3","AlbumCovers/artwork (copy 152).jpg")
+let song126 = new AudioPlayer("Too Oppy","Sha EK","MusicWebsite/Too Oppy.mp3","AlbumCovers/artwork (copy 153).jpg");
+let song127 = new AudioPlayer("Tweak","DudeyLo,Benzo B","MusicWebsite/Tweak.mp3","AlbumCovers/artwork (copy 154).jpg");
+let song128 = new AudioPlayer("Where Are You","Rocko Ballin","MusicWebsite/Where Are You.mp3","AlbumCovers/artwork (copy 155).jpg");
+let song129 = new AudioPlayer("Who I Am","DD Osama","MusicWebsite/Who I Am.mp3","AlbumCovers/artwork (copy 156).jpg");
+let song130 = new AudioPlayer("WICKED","BLOODIE","MusicWebsite/WICKED.mp3","AlbumCovers/artwork (copy 157).jpg");
+let song131 = new AudioPlayer("No Adlibs","KALIQ","MusicWebsite/No Adlibs.mp3","AlbumCovers/artwork (copy 158).jpg");
+let song132 = new AudioPlayer("New Opp","Sha Gz","MusicWebsite/New Opp.mp3","AlbumCovers/artwork (copy 159).jpg");
+let song133 = new AudioPlayer("Nina","Ndotspinalot","MusicWebsite/Nina.mp3","AlbumCovers/artwork (copy 160).jpg");
+let song134 = new AudioPlayer("Public Service Announcement","Lee Drilly","MusicWebsite/Public Service Announcement.mp3","AlbumCovers/artwork (copy 161).jpg");
+let song135 = new AudioPlayer("50 For 50","Blockwork","MusicWebsite/50 For 50.mp3","AlbumCovers/artwork (copy 162).jpg");
+let song137 = new AudioPlayer("AHH HAA","BLOODIE","MusicWebsite/AHH HAA.mp3","AlbumCovers/artwork (copy 163).jpg");
+let song138 = new AudioPlayer("Better Off Dead","Sha Gz","MusicWebsite/Better Off Dead.mp3","AlbumCovers/artwork (copy 164).jpg");
+let song139 = new AudioPlayer("BluBop2","C Blu","MusicWebsite/BluBop2.mp3","AlbumCovers/artwork (copy 165).jpg");
+let song140 = new AudioPlayer("Both Worlds","Edot Babyy","MusicWebsite/Both Worlds.mp3","AlbumCovers/artwork (copy 166).jpg");
+let song141 = new AudioPlayer("cater 2 u","DD Osama,Notti Osama,Sugarhill Ddot","MusicWebsite/cater 2 u.mp3","AlbumCovers/artwork (copy 167).jpg");
+let song142 = new AudioPlayer("Cloud9","SAVV G,Mir Ebk","MusicWebsite/Cloud9.mp3","AlbumCovers/artwork (copy 168).jpg");
+let song143 = new AudioPlayer("Cold War","Jay5ive,NazGPG,Sdot Go,Jay Hound","MusicWebsite/Cold War.mp3","AlbumCovers/artwork (copy 169).jpg");
+let song144 = new AudioPlayer("Da Real Brotherly Love 2","JStar Balla,DD Osama,JayKlickin","MusicWebsite/Da Real Brotherly Love 2.mp3","AlbumCovers/artwork (copy 170).jpg");
+let song145 = new AudioPlayer("Dead Opps","DD Osama,Notti Osama","MusicWebsite/Dead Opps.mp3","AlbumCovers/artwork (copy 171).jpg");
+let song146 = new AudioPlayer("Dyin 2 live","Blockwork","MusicWebsite/Dyin 2 Live.mp3","AlbumCovers/artwork (copy 172).jpg");
+let song147 = new AudioPlayer("Everybody Sweap","TG Crippy","MusicWebsite/Everybody Sweap.mp3","AlbumCovers/artwork (copy 173).jpg");
+let song148 = new AudioPlayer("Face Of The What ","Wowdy HBTL,Sha EK","MusicWebsite/Face Of The What .mp3","AlbumCovers/artwork (copy 174).jpg");
+let song149 = new AudioPlayer("Fallen soldiers","Blockwork","MusicWebsite/Fallen soldiers.mp3","AlbumCovers/artwork (copy 175).jpg");
+let song150 = new AudioPlayer("Fetty","41,Kyle Richh,Jenn Carter,TaTa","MusicWebsite/Fetty.mp3","AlbumCovers/artwork (copy 176).jpg");
+let song151 = new AudioPlayer("Freak Freak","B-Lovee","MusicWebsite/Freak Freak.mp3","AlbumCovers/artwork (copy 177).jpg");
+let song152 = new AudioPlayer("Insecurities","TaTa","MusicWebsite/Insecurities.mp3","AlbumCovers/artwork (copy 178).jpg");
+let song153 = new AudioPlayer("Let Ha Go","Sugarhill Ddot","MusicWebsite/Let Ha Go.mp3","AlbumCovers/artwork (copy 179).jpg");
+let song154 = new AudioPlayer("Long Live Notti","DD Osama","MusicWebsite/Long Live Notti.mp3","AlbumCovers/artwork (copy 180).jpg");
+let song155 = new AudioPlayer("Notti Bop","Kyle Richh,TaTa,Jenn Carter","MusicWebsite/Notti Bop.mp3","AlbumCovers/artwork (copy 181).jpg");
+let song156 = new AudioPlayer("On the Radar Freestyle","Kenzo Balla","MusicWebsite/On the Radar Freestyle 2.mp3","AlbumCovers/artwork (copy 182).jpg");
+let song157 = new AudioPlayer("ONNAT","JStar Balla,Sugarhill Tj,Reese Loc","MusicWebsite/ONNAT.mp3","AlbumCovers/artwork (copy 183).jpg");
+let song158 = new AudioPlayer("Poppa Perry","Sha Gz","MusicWebsite/Poppa Perry.mp3","AlbumCovers/artwork (copy 184).jpg");
+let song159 = new AudioPlayer("Pray For Us","ReyFlock Gz,Sha EverythingK,BDOT Goon","MusicWebsite/Pray For Us.mp3","AlbumCovers/artwork (copy 185).jpg");
+let song161 = new AudioPlayer("Ready 4 War","Edot Babyy","MusicWebsite/Ready 4 War.mp3","AlbumCovers/artwork (copy 186).jpg");
+let song162 = new AudioPlayer("READY","BLOODIE","MusicWebsite/READY.mp3","AlbumCovers/artwork (copy 187).jpg","");
+let song163 = new AudioPlayer("Shake It (feat. Cardi B, Dougie B & Bory300)","Kay Flock,Cardi B,Dougie B,Bory300","MusicWebsite/Shake It (feat. Cardi B, Dougie B & Bory300).mp3","AlbumCovers/artwork (copy 188).jpg");
+let song164 = new AudioPlayer("Supa Sitchy","Kenzo Balla","MusicWebsite/Supa Sitchy.mp3","AlbumCovers/artwork (copy 189).jpg");
+let song165 = new AudioPlayer("Taco","C Blu,M1 Reaper,Cito Blicc","MusicWebsite/Taco.mp3","AlbumCovers/artwork (copy 190).jpg");
+let song166 = new AudioPlayer("To Whom It May Concern","41,TaTa,Touchamill","MusicWebsite/To Whom It May Concern.mp3","AlbumCovers/artwork (copy 191).jpg");
+let song167 = new AudioPlayer("Touch The Ground","SugarHill Keem,Sha Ek,Edot Baby","MusicWebsite/Touch The Ground.mp3","AlbumCovers/artwork (copy 192).jpg");
+let song168 = new AudioPlayer("Upnow (feat. Coi Leray)","DD Osama,Coi Leray","MusicWebsite/Upnow (feat. Coi Leray).mp3","AlbumCovers/artwork (copy 193).jpg");
+let song169 = new AudioPlayer("We Back Pt. 2","Edot Babyy,Dee Play4Keeps","MusicWebsite/We Back Pt. 2.mp3","AlbumCovers/artwork (copy 194).jpg");
+let song170 = new AudioPlayer("Autograph","Juice WRLD","MusicWebsite/Juice WRLD .mp3","AlbumCovers/JRAdnd3ORXM-HD.jpg");
+let song171 = new AudioPlayer("734 OG","Juice WRLD","MusicWebsite/Juice WRLD - 734 (OG).mp3","AlbumCovers/emIsJ-czz5I-HD.jpg");
+
 
 
 // HOW TO SET SRC TO A FUNCTION OR VARIABLE AND HOW TO FIX COVER ART LINK
 
-async function selectSong(){
-    try{
-        randomIndex = await Math.floor(Math.random() * objectList.length);
-        getSong = await objectList[randomIndex];
-        randomSong = await getSong.songID;
-        songImage = await objectList[randomIndex].cover;
-        console.log(audio);
+function selectSong(){
+    
+    randomIndex = Math.floor(Math.random() * objectList.length);
+    getSong = objectList[randomIndex];
+    randomSong = getSong.songID;
+    songImage = objectList[randomIndex].cover;
+    console.log(audio);
         
-        prevSongList.push(randomSong);
-        prevCoverList.push(getSong.cover);
-        prevArtistList.push(getSong.artist);
-        prevTitleList.push(getSong.title);
-        prevSong++;
+    prevSongList.push(randomSong);
+    prevCoverList.push(getSong.cover);
+    prevArtistList.push(getSong.artist);
+    prevTitleList.push(getSong.title);
+    prevSong++;
 
-        console.log(`before await: ${audio}`);
-        audio = await new Audio(randomSong);
-        console.log(`After awiat: ${audio}`);
-        console.log(audio);
-        return true;
-
-    } catch (error){
-        console.log(`Error: ${error}`);
-    }
+    console.log(`before await: ${audio}`);
+    audio = new Audio(randomSong);
+    console.log(`After awiat: ${audio}`);
+    console.log(audio);
     
 }
 function setArtist(){
@@ -208,7 +274,6 @@ function setTitle(){
 
 async function setImage(){
     getImage.src = await songImage;
-    await console.log("currently setting image");
 }
 
 async function selectprevSong(){
@@ -223,6 +288,8 @@ async function selectprevSong(){
     else{
         window.alert("No previous songs");
         prevSong = 0;
+        audio.currentTime = 0;
+        audio.play();
     }
     console.log(audio);
     
@@ -261,6 +328,7 @@ function muteSong(){
     }
     
 }
+
 async function skip(){
     if(beginValue == 1){
         beginValue--;
@@ -270,12 +338,15 @@ async function skip(){
     currentsliderValue = audio.currentTime;
     clearInterval(timer);
     audio.pause();
-    audio = null;
     // need to figure out why await is not awaiting. LIKELY NEED TO MOVE ALL DIS STUFF BACK TO SELECT SONG THEN CALL SELECT SONG IN SKIP TO RUN.
-    await selectSong();
-    await audio.play();
+    if(isautoPlay == true){
+        audio.currentTime = 0;
+    }
+    else{
+        await selectSong();
+    }
+    audio.play();
     
-    console.log("Image tryna be set");
     setArtist();
     setTitle();
     toggleIcon();
@@ -298,7 +369,6 @@ async function playprevSong(){ // need to play previous song rest is fix except 
     prevSong--;
     clearInterval(timer);
     audio.pause();
-    audio = null;
     await selectprevSong();
     console.log(audio);
     setImage();
@@ -312,7 +382,6 @@ function toggleIcon(){
     }
     else{
         getIcon.classList.replace("fa-pause","fa-play");
-        console.log("Did toggle work");
     }
 }
 
@@ -322,38 +391,31 @@ async function play(){
             beginValue++;
             audio.play();
             toggleIcon();
-            console.log("Image tryna be set first if");
             timer = setInterval(updateTrack,1000);
         }
         else{
-            issongSelected = await selectSong();
-            if (issongSelected){
-                try{
-                    await audio.play(); //  JUST NEED TO FIX AWAIT ON AUDIO FREEZING PAGE. CONSOLE SHOWS I GOT AN AUDIO BUT SOMEHOW AUDIO.PLAY NOT WORKING. MAY NEED TO CHECK ON SELECT AUDIO IN SELECTSONG();
-                } catch (Error){
-                    console.log(Error);
-                }
-                console.log("Image tryna be set")
-                setImage()
-                console.log("is image set")
-                setArtist()
-                setTitle()
-                toggleIcon()
-                beginValue++
-                getsliderPosition.max = audio.duration
-                constantVolume = getsliderVolume.value
-                timer = setInterval(updateTrack,1000);
-                console.log(audio)
+            selectSong();
+            try{
+                await audio.play();
+            }catch(error){
+                console.log(error);
             }
-            
-                             
+            setImage();
+            setArtist();
+            setTitle();
+            toggleIcon();
+            beginValue++
+            getsliderPosition.max = audio.duration
+            constantVolume = getsliderVolume.value
+            timer = setInterval(updateTrack,1000);
+            console.log(audio)
+                               
              
         }
     }
     else if(beginValue ==1){
-        await toggleIcon();
+        toggleIcon();
         beginValue--;
-        console.log("This is running too and should not be")
         audio.pause();
         clearInterval(timer);
     }
@@ -370,7 +432,7 @@ function updateSlider(){
 function updateTrack(){
     if(audio != null){
         var maxMinutes = (Math.floor(audio.duration / 60));
-        var maxSeconds = (Math.floor(audio.duration & 60) + 10);
+        var maxSeconds = (Math.floor(audio.duration % 60));
         maxMinutes = pad(maxMinutes);
         maxSeconds = pad(maxSeconds);
         let endtimeEdited = maxMinutes + ":" + maxSeconds; // creates end timestamp
@@ -392,8 +454,9 @@ function updateTrack(){
         }
 
         audio.addEventListener("ended", async() =>{
-            await clearInterval(timer);
-            skip();
+            await clearInterval(timer);   // NEED TO SWITCH THESE TWO TO FIX AUTO PLAY may need to subtact one from beginValue
+            prevSong++;
+            skip();                               
         })
     }
     
