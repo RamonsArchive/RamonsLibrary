@@ -72,7 +72,7 @@ let song2 = new AudioPlayer("300 shots", "Sha Ek","MusicWebsite/300 Shots.mp3","
 let song3 = new AudioPlayer("300FLOCKA SHOT","Yus Gz,Sha Gzz,Nesty Gzz","MusicWebsite/300FLOCKA SHOT.mp3","AlbumCovers/artwork (copy 3).jpg");
 let song4 = new AudioPlayer("4148 (feat. Edot Babyy)","DD Osama,Edot Babyy,Lawsy","MusicWebsite/4148 (feat. Edot Babyy).mp3","AlbumCovers/artwork (copy 4).jpg");
 let song5 = new AudioPlayer("AFRICAN DEMONS PT2","Yus Gz,Scotty 2 Hotty,Nesty Floxks,Ab Da Jet","MusicWebsite/AFRICAN DEMONS PT2.mp3","AlbumCovers/artwork (copy 5).jpg");
-let song6 = new AudioPlayer("B-Lovee - Freestyle - Open Mic","DJ Smallz,Studio Of Legends,B-Lovee","B-lovee","MusicWebsite/B-Lovee - Freestyle - Open Mic.mp3","AlbumCovers/artwork (copy 6).jpg");
+let song6 = new AudioPlayer("B-Lovee - Freestyle - Open Mic","B-lovee","MusicWebsite/B-Lovee - Freestyle - Open Mic.mp3","AlbumCovers/artwork (copy 6).jpg");
 let song7 = new AudioPlayer("BACKDOOR","Yus Gz","MusicWebsite/BACKDOOR.mp3","AlbumCovers/artwork (copy 7).jpg");
 let song8 = new AudioPlayer("Beam","Kyle Richh,Mike Myerzz","","AlbumCovers/artwork (copy 8).jpg");
 let song9 = new AudioPlayer("Big Time Rush","BigKayBeezy","MusicWebsite/Big Time Rush.mp3","AlbumCovers/artwork (copy 9).jpg");
@@ -99,7 +99,7 @@ let song29 = new AudioPlayer("Ghetto Superstars","DudeyLo,Young Ja","MusicWebsit
 let song30 = new AudioPlayer("GRINCHIN","killmykel,Sdott goo","MusicWebsite/GRINCHIN.mp3","AlbumCovers/artwork (copy 30).jpg");
 let song31 = new AudioPlayer("Hazard Lights Freestyle","Jenn Carter","MusicWebsite/Hazard Lights Freestyle.mp3","AlbumCovers/artwork (copy 31).jpg");
 let song32 = new AudioPlayer("I Wanna Kno","Dudey Lo","MusicWebsite/I Wanna Kno.mp3","AlbumCovers/artwork (copy 32).jpg");
-let song33 = new AudioPlayer("I'm Addicted 2","laykied,Kyleee","MusicWebsite/I'm Addicted 2.mp3","AlbumCovers/artwork (copy 33).jpg");
+let song33 = new AudioPlayer("I'm Addicted 2","Jenn Carter, Kyle Richh","MusicWebsite/I'm Addicted 2.mp3","AlbumCovers/artwork (copy 33).jpg");
 let song34 = new AudioPlayer("Ice Cream Truck","SugarHill Keem","MusicWebsite/Ice Cream Truck.mp3","AlbumCovers/artwork (copy 34).jpg");
 let song35 = new AudioPlayer("It Ain't Over","Blockwork","MusicWebsite/It Ain't Over.mp3","AlbumCovers/artwork (copy 35).jpg");
 let song36 = new AudioPlayer("Kan't Lack","Kenzo Balla,FaZe Kaysan","MusicWebsite/Kan't Lack.mp3","AlbumCovers/artwork (copy 36).jpg");
@@ -330,22 +330,20 @@ function muteSong(){
 }
 
 async function skip(){
-    if(beginValue == 1){
-        beginValue--;
-    }
+    beginValue--;
     audio.currentTime = 0;
     getsliderPosition.value = audio.currentTime;
     currentsliderValue = audio.currentTime;
     clearInterval(timer);
     audio.pause();
     // need to figure out why await is not awaiting. LIKELY NEED TO MOVE ALL DIS STUFF BACK TO SELECT SONG THEN CALL SELECT SONG IN SKIP TO RUN.
-    if(isautoPlay == true){
-        audio.currentTime = 0;
+    if(isautoPlay){
+        audio.play();
     }
     else{
         await selectSong();
+        audio.play();
     }
-    audio.play();
     
     setArtist();
     setTitle();
@@ -356,7 +354,6 @@ async function skip(){
     getsliderPosition.max = audio.duration;
     constantVolume = getsliderVolume.value;
     timer = setInterval(updateTrack,1000);
-    console.log(audio);
 }
 
 async function playprevSong(){ // need to play previous song rest is fix except for mute
@@ -407,10 +404,7 @@ async function play(){
             beginValue++
             getsliderPosition.max = audio.duration
             constantVolume = getsliderVolume.value
-            timer = setInterval(updateTrack,1000);
-            console.log(audio)
-                               
-             
+            timer = setInterval(updateTrack,1000);  
         }
     }
     else if(beginValue ==1){
@@ -452,12 +446,14 @@ function updateTrack(){
         function pad(unit){
             return ("0" + unit).length > 2 ? unit : "0" + unit;
         }
-
-        audio.addEventListener("ended", async() =>{
-            await clearInterval(timer);   // NEED TO SWITCH THESE TWO TO FIX AUTO PLAY may need to subtact one from beginValue
-            prevSong++;
-            skip();                               
-        })
+        // audio.addEventListener("ended", async() =>{
+         //   await clearInterval(timer);   // NEED TO SWITCH THESE TWO TO FIX AUTO PLAY may need to subtact one from beginValue
+        //    skip(); 
+         //   prevSong++;                               
+       // })
+       if (audio.currentTime == audio.duration){
+        skip();
+       }
     }
     
 }
