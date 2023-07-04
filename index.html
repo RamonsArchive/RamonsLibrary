@@ -2,58 +2,52 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>U Heard</title>
-    <link rel = "styleSheet" href="style.css">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://kit.fontawesome.com/65babb9445.js" crossorigin="anonymous"></script>
-    
 </head>
 <body>
-    <div id = "main"> 
-        <!-- Audio Player part-->
-        <div class="musicPlayer"> 
-            <div id="demographics">
-                <img id="songCover" class="demographics" src="selectSong()">
-                <br>
+    <div id="backdrop">
+        <img id="backdropImg">
+        <div id="wrapper">
+            <div id="songCover">
+                <img id="image" alt="">
             </div>
 
+            <div id="songInfo">
+                <p id="songName">Song name</p> 
+                <p id="songArtist">Song artist</p>
+            </div>
 
-            <div id="songControls">
-                
-                <div id="volumeControls">
-                    <input class="sliders" id="volumeSlider" type = "range" min="0" max="100" value="60" onchange="volume_change()">
-                    <br>   
-                    <button id="mute" class="useBtn"> <i class="fa-solid fa-volume-high"></i> </button>
-                    <button id="autoplay" class="useBtn"> <i class="fa-solid fa-shuffle"></i></button>
-                </div>
+            <div id="volume">
+                <input type="range" id="volumeSlider" min="0" max="100">
+                <button id="mute" class="abutton"> <i class="fa-solid fa-volume-high"></i> </button>
+            </div>
 
-                <div class="songInfo">
-                    <label id="songTitle" class="demographics"> Song name</label> <br><br>
-                    <label id="artistName"class="demographics">Artist name</label><br><br>
-                </div>
-                <br>
+            <div id="controls">
                 <div id="positionControls">
-                    <br><br>
-                    <sub class="currentTimer" id="currentTime"> start</sub> 
-                    <input class="sliders" id="positionSlider" type = "range" min="0" max="100" value = "0" onchange="position_change()">
-                    <sub class="endTimer" id="endTime">end</sub> <br>
-                    <div id="commandButtons"> 
-                        <button id="prevSong" class="useBtn"> <i class="fa-solid fa-backward"></i></button>
-                        <button id="myButton" class="useBtn"> <i class="fa-solid fa-play"></i> </button> 
-                        <button id="skip" class="useBtn"> <i class="fa-solid fa-forward"></i> </button>
-                    </div>
-                    
+                    <sub id="startTime">start</sub>
+                    <input type="range" id="positionSlider" value="0">
+                    <sub id="endTime">end</sub>
                 </div>
-                <br>
+                <div id="buttonControls">
+                    <button id="likedSongs" class="abutton"><i class="fa-regular fa-heart"></i></button>
+                    <button id="prevSong" class="abutton"><i class="fa-solid fa-backward"></i> </button>
+                    <button id="playPause" class="abutton"><i class="fa-solid fa-play"></i> </button>
+                    <button id="skip" class="abutton"> <i class="fa-solid fa-forward"></i> </button>
+                    <button id="autoPlay" class="abutton"> <i class="fa-solid fa-shuffle"></i></button>
+                </div>
                 
-
             </div>
-        </div>
+
+        </div> 
+
+
     </div>
-    <script src="MyWebsite.js"> </script>
+    <script src="setMusic.js" type="module"> </script>
+    <script src="MyWebsite.js" type="module"> </script>
 </body>
 </html>
-

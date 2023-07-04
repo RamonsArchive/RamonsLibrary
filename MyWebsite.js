@@ -1,70 +1,306 @@
-let beginValue = 0;
-let title;
-let artist;
-let songID;
-let cover;
+
+let songName;
+let artistName;
+let songId;
+let songCover;
+let isHearted;
+let volume;
 let objectList = [""];
-let getSong;
+let songList = [""];
+let likedList = [""];
+
+let myAudio = null;
+let songObject;
 let randomIndex;
+let collectrandomIndex;
+let isPlaying = null;
+let isMute = false;
+let isSkip = true;
+let currentSliderPosition = 0;
+let constantVolume = 0.6;
+let depth = 0;
+let startTimer;
 
-
-let randomSong;
-let songImage;// gets the image for song in selectSong() 
-let audio;
-let currentsliderValue = 0; // used in updateSlider() to keep track of seconds for slider
-var dur; // duration of song
-let constantVolume;
-let issongSelected = false;
-
-let isprevSong = false;
-let isautoPlay = false;
-let prevSong = 0;
-let prevSongList = [""];
-let prevCoverList = [""];
-let prevArtistList = [""];
-let prevTitleList = [""];
-
-let skipSong = document.getElementById("skip");  // event listner variable for skip();
-let getsliderPosition = document.getElementById("positionSlider"); // slider for sliderUpdate();
-let getsliderVolume = document.getElementById("volumeSlider");
-let getButton = document.getElementById("myButton");
+let getSongCover = document.getElementById("image");
+let getsongName = document.getElementById("songName");
+let getartistName = document.getElementById("songArtist");
+let getVolume = document.querySelector("#volumeSlider");
 let getMute = document.getElementById("mute");
-let getPrev = document.getElementById("prevSong")
-let getImage = document.getElementById("songCover");
-let getautoPlay = document.getElementById("autoplay");
-let getartistName = document.getElementById("artistName");
-let getTitle = document.getElementById("songTitle");
-let getIcon = getButton.querySelector(".fa-play");
-let getvolumeIcon = getMute.querySelector(".fa-volume-high");
-let getautoPlayIcon = getautoPlay.querySelector(".fa-shuffle");
+let getstartTime = document.getElementById("startTime");
+let getpositionSlider = document.getElementById("positionSlider");
+let getendTime = document.getElementById("endTime");
+let getlikedSongs = document.getElementById("likedSongs");
+let getprevSong = document.getElementById("prevSong");
+let getplayButton = document.getElementById("playPause");
+let getSkip = document.getElementById("skip");
+let getautoPlay = document.getElementById("autoPlay");
+let getbackdropImg = document.getElementById("backdropImg");
 
-getButton.addEventListener("click",play);
-skipSong.addEventListener("click",skip);
-getMute.addEventListener("click",muteSong);
-getPrev.addEventListener("click",playprevSong); 
-getautoPlayIcon.addEventListener("click", () => {
-    if (getautoPlayIcon.classList.contains("fa-shuffle")){
-        getautoPlayIcon.classList.replace("fa-shuffle","fa-rotate-left");
-        isautoPlay = true;
-        rotatesongIndex = prevSongList.length -1;
-    }
-    else{
-        getautoPlayIcon.classList.replace("fa-rotate-left","fa-shuffle");
-        isautoPlay = false;
-        rotatesongIndex = 0;
-    }
-})
+let getplayIcon = getplayButton.querySelector(".fa-play");
+let getmuteIcon = getMute.querySelector(".fa-volume-high");
+let getautoplayIcon = getautoPlay.querySelector(".fa-shuffle");
+let getheartIcon = getlikedSongs.querySelector(".fa-regular");
+let gethearticonColor = getlikedSongs.querySelector("#likedSongs .fa-heart");
 
 class AudioPlayer{
-    constructor(title,artist,songID,cover){
-        this.title = title;
-        this.artist = artist;
-        this.songID = songID;
-        this.cover = cover;
+    constructor(songName,artistName,songId,songCover,isHearted){
+        this.songName = songName;
+        this.artistName = artistName;
+        this.songId = songId;
+        this.songCover = songCover;
+        this.isHearted = false;
 
         objectList.push(this);
     }
 }
+
+window.addEventListener("load",()=>{
+    window.alert("Click play to start. Updates in the future");
+})
+
+function selectSong(){
+    randomIndex = Math.floor(Math.random() * objectList.length);
+    songList.push(objectList[randomIndex]);
+    songObject = objectList[randomIndex];
+    let songFile = songObject.songId;
+    myAudio = new Audio(songFile);
+}
+
+getplayButton.addEventListener("click", async() =>{
+    if(myAudio == null){
+        selectSong();
+        await myAudio.play();
+        isPlaying = true;
+        getbackdropImg.src = songObject.songCover;
+        getplayIcon.classList.replace("fa-play","fa-pause");
+        getsongName.innerHTML = songObject.songName;
+        getartistName.innerHTML = songObject.artistName;
+        getSongCover.src = songObject.songCover;
+        startTimer = setInterval(updateTrack,1000);
+        depth++;
+        console.log(myAudio);
+        console.log(depth);
+    }
+    else if(isPlaying){
+        myAudio.pause();
+        isPlaying = false
+        getplayIcon.classList.replace("fa-pause","fa-play");
+        clearInterval(startTimer);
+        console.log("played");
+    }
+    else if(!isPlaying){
+        myAudio.play();
+        isPlaying = true;
+        getplayIcon.classList.replace("fa-play","fa-pause");
+        startTimer = setInterval(updateTrack,1000);
+        console.log("paused");
+    }
+})
+
+getSkip.addEventListener("click", async()=>{
+    clearInterval(startTimer);
+    myAudio.pause();
+    depth++
+    myAudio = await setnextSong();
+    myAudio.play();
+    startTimer = setInterval(updateTrack,1000);
+    setData();
+    console.log(myAudio);
+})
+
+async function setnextSong(){
+    if (depth == songList.length){
+        randomIndex = await Math.floor(Math.random() * objectList.length);
+        songList.push(objectList[randomIndex]);
+        return await new Audio(objectList[randomIndex].songId); // see if this gets rid of null songs
+    }
+    else{
+        return new Audio(songList[depth].songId);
+    }
+}
+
+async function setprevSong(){
+    if (depth >= 0){
+        return new Audio(songList[depth].songId);
+    }
+    else{
+        window.alert("No previous songs.");
+        depth = 0;
+        return new Audio(songList[depth].songId);
+    }
+}
+
+getprevSong.addEventListener("click", async()=>{
+    clearInterval(startTimer);
+    myAudio.pause();
+    depth--;
+    myAudio = await setprevSong();
+    console.log(myAudio)
+    myAudio.play();
+    startTimer = setInterval(updateTrack,1000);
+    setData();
+})
+
+getpositionSlider.addEventListener("click", () => {
+    currentSliderPosition = getpositionSlider.value;
+    myAudio.currentTime = getpositionSlider.value;
+})
+
+getVolume.addEventListener("click", ()=>{
+    constantVolume = getVolume.value * 0.01;
+    myAudio.volume = constantVolume;
+    if(myAudio.volume > 0){
+        if(isMute){
+            isMute = false;
+            getmuteIcon.classList.replace("fa-volume-xmark","fa-volume-high");
+        }
+    }
+    else if(myAudio.volume < 0.01){
+        isMute = true;
+        getmuteIcon.classList.replace("fa-volume-high","fa-volume-xmark")
+    }
+})
+
+function setData(){
+    let currentIndex;
+    if(depth == songList.length)
+    {
+        currentIndex = randomIndex;
+    }
+    else{
+        currentIndex = depth;
+    }
+    isPlaying = true;
+    currentSliderPosition = 0;
+    myAudio.currentTime = 0;
+    if(!isMute){
+        myAudio.volume = constantVolume;
+        getVolume.value = constantVolume * 100;
+    }
+    else{
+        myAudio.volume = 0;
+        getVolume.value = 0;
+    }
+    isPlaying = true;
+    getbackdropImg.src = songList[currentIndex].songCover;
+    getplayIcon.classList.replace("fa-play","fa-pause");
+    getsongName.innerHTML = songList[currentIndex].songName;
+    getartistName.innerHTML = songList[currentIndex].artistName;
+    getSongCover.src = songList[currentIndex].songCover;
+    
+}
+
+function updateTrack(){
+    getpositionSlider.max = myAudio.duration;
+    getpositionSlider.min = 0;
+
+    let maxMinute = Math.floor(myAudio.duration / 60);
+    let maxSecond = Math.floor(myAudio.duration % 60);
+    let minutes = Math.floor(myAudio.currentTime / 60);
+    let seconds = Math.floor(myAudio.currentTime % 60);
+    maxMinute = pad(maxMinute);
+    maxSecond = pad(maxSecond);
+    minutes = pad(minutes);
+    seconds = pad(seconds);
+
+    getendTime.innerHTML = maxMinute + ":" + maxSecond;
+    getstartTime.innerHTML = minutes + ":" + seconds;
+
+    currentSliderPosition++;
+    getpositionSlider.value = currentSliderPosition;
+
+    function pad(time){
+        return ("0" + time).length > 2 ? time : "0" + time;
+    }
+
+    myAudio.addEventListener("ended", async()=>{
+        if(isSkip == true){
+            await clearInterval(startTimer);
+            depth++;
+            myAudio.pause();
+            myAudio = null;
+            if (depth == songList.length){
+                randomIndex = Math.floor(Math.random() * objectList.length);
+                songList.push(objectList[randomIndex]);
+                myAudio = new Audio(objectList[randomIndex].songId); // see if this gets rid of null songs
+            }
+            else{
+                myAudio = new Audio(songList[depth].songId);
+            }
+            await myAudio.play();
+            startTimer = setInterval(updateTrack,1000);
+            setData();
+        }
+        else{
+            currentSliderPosition = 0;
+            getpositionSlider.value = 0;
+            myAudio.currentTime = 0;
+            await myAudio.play(); 
+        }
+        
+    })
+}
+
+getMute.addEventListener("click", ()=>{
+    if(myAudio.volume > 0){
+        myAudio.volume = 0;
+        getVolume.value = 0;
+        getmuteIcon.classList.replace("fa-volume-high","fa-volume-xmark")
+        isMute = true;
+    }
+    else{
+        myAudio.volume = constantVolume;
+        getVolume.value = constantVolume * 100;
+        getmuteIcon.classList.replace("fa-volume-xmark","fa-volume-high");
+        isMute = false;
+    }
+})
+
+getautoPlay.addEventListener("click",()=>{
+    if(isSkip == true){
+        getautoplayIcon.classList.replace("fa-shuffle","fa-rotate-left");
+        isSkip = false;
+    }
+    else{
+        getautoplayIcon.classList.replace("fa-rotate-left","fa-shuffle");
+        isSkip = true;
+    }
+})
+
+getlikedSongs.addEventListener("click", ()=>{
+    if(depth == songList.length){
+        if(objectList[randomIndex].isHearted == false){
+            objectList[randomIndex].isHearted = true;
+            getheartIcon.classList.replace("fa-regular","fa-solid");
+            gethearticonColor.style.color = "#3535F3";
+            console.log(objectList[randomIndex].isHearted)
+            console.log(objectList[randomIndex].songId)
+        }
+        else{
+            objectList[randomIndex].isHearted = false;
+            console.log("randomIndex index false")
+            getheartIcon.classList.replace("fa-solid","fa-regular");
+            gethearticonColor.style.color = "white";
+            console.log(objectList[randomIndex].isHearted)
+            console.log(objectList[randomIndex].songId)
+        }
+    }
+    else{
+        if(songList[depth].isHearted == false) // current index because audio is in past
+        {
+            songList[depth].isHearted = true;
+            getheartIcon.classList.replace("fa-regular","fa-solid");
+            gethearticonColor.style.color = "#3535F3";
+            console.log("current index true")
+        }
+        else{
+            songList[depth].isHearted = false;
+            getheartIcon.classList.replace("fa-solid","fa-regular");
+            gethearticonColor.style.color = "white";
+            console.log("current index false")
+        }
+    }
+})
 
 let song = new AudioPlayer("Llkd","Dudylo","MusicWebsite/Llkd.mp3","AlbumCovers/artwork (copy 41).jpg");
 let song1 = new AudioPlayer("'Letter To My Brother' Bootleg Kev Freestyle","Kyle Richh,Jenn Carter","MusicWebsite/'Letter To My Brother' Bootleg Kev Freestyle.mp3","AlbumCovers/artwork.jpg");
@@ -242,221 +478,6 @@ let song171 = new AudioPlayer("734 OG","Juice WRLD","MusicWebsite/Juice WRLD - 7
 
 
 
-// HOW TO SET SRC TO A FUNCTION OR VARIABLE AND HOW TO FIX COVER ART LINK
-
-function selectSong(){
-    
-    randomIndex = Math.floor(Math.random() * objectList.length);
-    getSong = objectList[randomIndex];
-    randomSong = getSong.songID;
-    songImage = objectList[randomIndex].cover;
-    console.log(audio);
-        
-    prevSongList.push(randomSong);
-    prevCoverList.push(getSong.cover);
-    prevArtistList.push(getSong.artist);
-    prevTitleList.push(getSong.title);
-    prevSong++;
-
-    console.log(`before await: ${audio}`);
-    audio = new Audio(randomSong);
-    console.log(`After awiat: ${audio}`);
-    console.log(audio);
-    
-}
-function setArtist(){
-    getartistName.innerHTML = getSong.artist;
-}
-
-function setTitle(){
-    getTitle.innerHTML = getSong.title;
-}
-
-async function setImage(){
-    getImage.src = await songImage;
-}
-
-async function selectprevSong(){
-    if(prevSong > 0){
-        audio = await new Audio(prevSongList[prevSong]); // Cant find preSong line 58
-        songImage = prevCoverList[prevSong]; // to set new album cover
-        console.log("getting previous image"); // pinpoint setting previous image
-        getartistName.innerHTML = prevArtistList[prevSong];
-        getTitle.innerHTML = prevTitleList[prevSong];
-        console.log(objectList[prevSong]);
-    }
-    else{
-        window.alert("No previous songs");
-        prevSong = 0;
-        audio.currentTime = 0;
-        audio.play();
-    }
-    console.log(audio);
-    
-}
-
-function setVolume(){
-    audio.volume = getsliderVolume.value * 0.01;
-    getsliderVolume.value = constantVolume;
-}
-
-function volume_change(){
-    audio.volume = getsliderVolume.value *.01;
-    constantVolume = getsliderVolume.value
-    return audio.volume;
-}
-
-function position_change(){
-    getsliderPosition.min = 0;
-    getsliderPosition.max = audio.duration;
-    audio.currentTime = getsliderPosition.value; // sets current time to starting time for updateSlider();
-    currentsliderValue = audio.currentTime;
-    currentsliderValue++;
-}
-
-function muteSong(){
-    if(audio.volume > 0){
-        audio.volume = 0;
-        getsliderVolume.value = 0;
-        getvolumeIcon.classList.replace("fa-volume-high","fa-volume-xmark");
-    }
-    else if (audio.volume == 0){
-        getsliderVolume.value = constantVolume;
-        audio.volume = constantVolume *0.01;
-        console.log(audio.volume);
-        getvolumeIcon.classList.replace("fa-volume-xmark","fa-volume-high");
-    }
-    
-}
-
-async function skip(){
-    beginValue--;
-    audio.currentTime = 0;
-    getsliderPosition.value = audio.currentTime;
-    currentsliderValue = audio.currentTime;
-    clearInterval(timer);
-    audio.pause();
-    // need to figure out why await is not awaiting. LIKELY NEED TO MOVE ALL DIS STUFF BACK TO SELECT SONG THEN CALL SELECT SONG IN SKIP TO RUN.
-    if(isautoPlay){
-        audio.play();
-    }
-    else{
-        await selectSong();
-        audio.play();
-    }
-    
-    setArtist();
-    setTitle();
-    toggleIcon();
-    setImage();
-    setVolume();
-    beginValue++;
-    getsliderPosition.max = audio.duration;
-    constantVolume = getsliderVolume.value;
-    timer = setInterval(updateTrack,1000);
-}
-
-async function playprevSong(){ // need to play previous song rest is fix except for mute
-    if (beginValue == 1){
-        beginValue--;
-    }
-    audio.currentTime = 0;
-    getsliderPosition.value = audio.currentTime;
-    currentsliderValue = audio.currentTime;
-    prevSong--;
-    clearInterval(timer);
-    audio.pause();
-    await selectprevSong();
-    console.log(audio);
-    setImage();
-    setVolume();
-    play();
-}
-
-function toggleIcon(){
-    if (getIcon.classList.contains("fa-play")){
-        getIcon.classList.replace("fa-play","fa-pause");
-    }
-    else{
-        getIcon.classList.replace("fa-pause","fa-play");
-    }
-}
-
-async function play(){
-    if (beginValue == 0){
-        if(audio != null){
-            beginValue++;
-            audio.play();
-            toggleIcon();
-            timer = setInterval(updateTrack,1000);
-        }
-        else{
-            selectSong();
-            try{
-                await audio.play();
-            }catch(error){
-                console.log(error);
-            }
-            setImage();
-            setArtist();
-            setTitle();
-            toggleIcon();
-            beginValue++
-            getsliderPosition.max = audio.duration
-            constantVolume = getsliderVolume.value
-            timer = setInterval(updateTrack,1000);  
-        }
-    }
-    else if(beginValue ==1){
-        toggleIcon();
-        beginValue--;
-        audio.pause();
-        clearInterval(timer);
-    }
-}
-
-function updateSlider(){
-    getsliderPosition.max = audio.duration;
-    currentsliderValue++
-    getsliderPosition.value = currentsliderValue;
-    console.log(getsliderPosition.value);
-}
-
-// update track automatically // need to fix tens place for seconds
-function updateTrack(){
-    if(audio != null){
-        var maxMinutes = (Math.floor(audio.duration / 60));
-        var maxSeconds = (Math.floor(audio.duration % 60));
-        maxMinutes = pad(maxMinutes);
-        maxSeconds = pad(maxSeconds);
-        let endtimeEdited = maxMinutes + ":" + maxSeconds; // creates end timestamp
-        document.getElementById("endTime").innerHTML = endtimeEdited;
-
-        var minutes = Math.floor(audio.currentTime / 60);
-        var seconds = Math.floor(audio.currentTime % 60);
-        minutes = pad(minutes); // either adds zero before value if lenght < 2 or remvoes if otherwise.
-        seconds = pad(seconds);
-        updateSlider();
-
-        if(!isNaN(audio.duration)){
-            dur = minutes.substring(-2) + ":" + seconds;
-            document.getElementById("currentTime").innerHTML = dur;
-        }
-
-        function pad(unit){
-            return ("0" + unit).length > 2 ? unit : "0" + unit;
-        }
-        // audio.addEventListener("ended", async() =>{
-         //   await clearInterval(timer);   // NEED TO SWITCH THESE TWO TO FIX AUTO PLAY may need to subtact one from beginValue
-        //    skip(); 
-         //   prevSong++;                               
-       // })
-       if (audio.currentTime == audio.duration){
-        skip();
-       }
-    }
-    
-}
 
 
 

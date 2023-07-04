@@ -1,139 +1,175 @@
+*{
+    margin: 0;
+    padding: 0;
 
-body{
-    background-color: rgb(212, 54, 65);
-    justify-content: center;
-    font-family: 'Quicksand', sans-serif;
+}
+#backdrop{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    margin: 0 0 0 0;
     display: flex;
-    min-height: 100vh;
-    padding-bottom: 200px;
-    align-items: center;
-    border:.5px solid plum;
-    box-shadow: 0 2px 100px black;
-}
-
-#main{
-    position: relative;
-    align-items: center;
     justify-content: center;
-    width: 500px;
-    height: 500px;
-}
-
-.musicPlayer{
-    position: relative;
     align-items: center;
-    display: relative;
-    justify-content: center;
-    margin-bottom: 200px;
-    width: 600px;
-    height: 500px;
 }
-#songControls{
-   
-    display: flex;
-    align-items: center;
-    justify-content: center;
+#backdropImg{
+    border: 1px solid black;
+    position: absolute;
+    z-index: -10;
+    height: 100%;
+    width: 100%;
+    filter: brightness(80%) blur(10px);
     
 }
-#positionControls{
-    display: relative;
+#wrapper{
     position: relative;
-    margin-top: 200px;
-    height: 0px;
-    justify-content: center;
-    pointer-events: auto;
-    width: 600px;
-}
-
-#volumeControls{
-    margin-left: 500px;
-    margin-top: 40px;
-    position: absolute;
-    align-items: center;
-    display: center;
-
-}
-
-.demographics{
-    position: flex;
-    width: 500px;
-}
-
-.songInfo{
-    position: absolute;
-    margin-right: 125px;
-    margin-top: 100px;
+    height: 650px;
     width: 400px;
+    box-shadow: 10px,40px,50px;
+    z-index: auto;
 }
-#volumeSlider{
-    -webkit-appearance: slider-vertical;
-    width: 20px;
-    height: 125px;
-    margin-left: 20px;
-    justify-content: center;
-    cursor: pointer;
+#wrapper:before{
+    content: "";
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    background-color: black;
+    opacity: 0.3;
+    filter: blur(10px);
+    
 }
-#positionSlider{
+#songCover{
     position: relative;
-    width: 450px;
-    cursor: pointer;
+    width: 400px;
+    height: 400px;
 }
-#commandButtons{
-    justify-content: center;
-    margin-right: 50px;
+#image{
+    width: 400px;
+    box-shadow: 10px 3px 80px;
+    border: 1px solid white;
+}
+#songInfo{
+    position: absolute;
+    width: 350px;
+    height: 160px;
     display: flex;
-}
-#mute{
-    position: relative;
-    justify-content: center;
-    cursor: pointer;
-}
-#autoplay{
-    position: relative;
-    justify-content: center;
-    cursor: pointer;
-}
-
-#artistName{
-    position:relative;
-    align-items: center;
+    justify-content: end;
+    flex-direction: column;
     font-family: 'Quicksand', sans-serif;
-    justify-content: center;
+    word-wrap: break-word;
+    color: white;
+    backdrop-filter: brightness(10%);
+
+}
+#songInfo #songName{
+    font-size: 40px;
+}
+#songInfo #songArtist{
     font-size: 25px;
 }
 
-#songTitle{
-    position: relative;
-    align-items: center;
-    display: center;
+#volume{
+    position: absolute;
+    display: flex;
     justify-content: center;
-    font-family: 'Quicksand', sans-serif;
-    font-size: 40px;
-    margin-bottom: 50px;
-}
-#songCover{
-    border: .5px solid white;
-    border-radius: 0%;
-    box-shadow: 0 10px 40px black;
-}
-
-.useBtn{
-    width: 50px;
-    height: 20px;
-    border: 3px;
-    border-radius: 12px;
     align-items: center;
-    margin: 3px;
+    flex-direction: column;
+    right: 0px;
+    width: 50px;
+    height: 160px;
+    padding-top: 10px;
+    color: white;
+}
+#volume input{
+    -webkit-appearance: slider-vertical;
+    height: 100px;
     cursor: pointer;
-    border: .25px solid rgb(117, 14, 14);
-    background-color: rgb(213, 70, 80);
-    box-shadow: 0 10px 45px black;
-
-    cursor: pointer;
+}
+#controls{
+    position: absolute;
+    width: 400px;
+    height: 100px;
+    margin-top: 160px;
     font-family: 'Quicksand', sans-serif;
+}
+#positionControls{
+    position: absolute;
+    width: 400px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+#positionSlider{
+    width: 350px;
+    cursor: pointer;
+    border: 1px solid white;
+}
+#buttonControls{
+    position: absolute;
+    bottom: 0px;
+    width: 400px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 30px;
+}
+.abutton{
+    width: 40px;
+    height: 15px;
+    cursor: pointer;
+    margin: 10px;
+    background-color: transparent;
+    color: white;
+}
+#likedSongs .fa-heart{
+    
 }
 
 
+@media only screen and (min-width: 1000){
+    #wrapper{
+        height: 800px;
+        width: 600px;
+    }
 
+    #songCover{
+        height: 60%;
+    }
+    #songInfo{
+        width: 550px;
+        height: 180px
+    }
+    #volume{
+        right: 0px;
+        width: 50px;
+        height: 180px;
+    }
+    #controls{
+        width: 600px;
+        height: 140px;
+        margin-top: 180px;
+    }
+    #positionControls{
+        width: 600px;
+        height: 110px;
+    }
+    #positionSlider{
+        width: 550px;
+    }
+    #buttonControls{
+        width: 600px;
+        height: 50px;
+        padding-bottom: 60px;
+    }
+    #abutton{
+        width: 50px;
+        height: 15px;
+    }
 
-
+}
