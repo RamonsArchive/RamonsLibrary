@@ -55,7 +55,7 @@ class AudioPlayer{
 }
 
 window.addEventListener("load",()=>{
-    window.alert("Click play to start. Updates in the future");
+    window.alert("Click play to start.");
 })
 
 function selectSong(){
@@ -79,7 +79,6 @@ getplayButton.addEventListener("click", async() =>{
         startTimer = setInterval(updateTrack,1000);
         depth++;
         console.log(myAudio);
-        console.log(depth);
     }
     else if(isPlaying){
         myAudio.pause();
@@ -222,12 +221,12 @@ function updateTrack(){
             if (depth == songList.length){
                 randomIndex = Math.floor(Math.random() * objectList.length);
                 songList.push(objectList[randomIndex]);
-                myAudio = new Audio(objectList[randomIndex].songId); // see if this gets rid of null songs
+                myAudio = await new Audio(objectList[randomIndex].songId); // see if this gets rid of null songs
             }
             else{
-                myAudio = new Audio(songList[depth].songId);
+                myAudio = await new Audio(songList[depth].songId);
             }
-            await myAudio.play();
+            myAudio.play();
             startTimer = setInterval(updateTrack,1000);
             setData();
         }

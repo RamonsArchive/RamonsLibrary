@@ -1,5 +1,5 @@
 *{
-    margin: 0;
+    margin: 0 0 0 0;
     padding: 0;
 
 }
@@ -131,45 +131,183 @@
     
 }
 
-
-@media only screen and (min-width: 1000){
-    #wrapper{
-        height: 800px;
-        width: 600px;
+@media screen and (max-width: 1000px){
+    *{
+        margin: 0 0 0 0;
+        padding: 0;
+    
     }
-
+    #backdrop{
+    }
+    #backdropImg{
+        
+    }
+    #wrapper{
+        position: relative;
+        height: 550px;
+        width: 300px;
+        box-shadow: 10px,40px,50px;
+        z-index: auto;
+    }
+    #wrapper:before{
+        content: "";
+        position: absolute;
+        
+    }
     #songCover{
-        height: 60%;
+        width: 300px;
+        height: 300px;
+    }
+    #image{
+        width: 300px;
     }
     #songInfo{
-        width: 550px;
-        height: 180px
+        width: 265px;
+        height: 150px;
+    
     }
+    #songInfo #songName{
+        font-size: 35px;
+    }
+    #songInfo #songArtist{
+        font-size: 25px;
+    }
+    
     #volume{
         right: 0px;
-        width: 50px;
-        height: 180px;
+        width: 35px;
+        height: 110px;
+        padding-top: 40px;
+        color: white;
+    }
+    #volume input{
+        -webkit-appearance: slider-vertical;
+        height: 100px;
     }
     #controls{
-        width: 600px;
-        height: 140px;
-        margin-top: 180px;
+        width: 300px;
+        height: 75px;
+        margin-top: 150px;
     }
     #positionControls{
-        width: 600px;
-        height: 110px;
+        width: 300px;
+        height: 30px;
+        margin-top: 15px;
     }
     #positionSlider{
-        width: 550px;
+        width: 275px;
     }
     #buttonControls{
-        width: 600px;
-        height: 50px;
-        padding-bottom: 60px;
+        bottom: 0px;
+        width: 300px;
+        height: 30px;
+        padding-bottom: 0px;
     }
-    #abutton{
-        width: 50px;
+    .abutton{
+        width: 35px;
         height: 15px;
+        cursor: pointer;
+        margin: 10px;
     }
+    #likedSongs .fa-heart{
+        
+    }
+}
 
+
+@media screen and (max-width: 700px){
+    *{
+        margin: 0 0 0 0;
+        padding: 0;
+    
+    }
+    #backdrop{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        margin: 0 0 0 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    #backdropImg{
+        border: 1px solid black;
+        position: absolute;
+        z-index: -10;
+        height: 100%;
+        width: 100%;
+        filter: brightness(80%) blur(10px);
+        
+    }
+    #wrapper{
+        position: relative;
+        height: 450px;
+        width: 200px;
+        box-shadow: 10px,40px,50px;
+        z-index: auto;
+    }
+    #wrapper:before{
+        content: "";
+        position: absolute;
+        
+    }
+    #songCover{
+        width: 200px;
+        height: 200px;
+    }
+    #image{
+        width: 200px;
+    }
+    #songInfo{
+        width: 165px;
+        height: 120px;
+    
+    }
+    #songInfo #songName{
+        font-size: 25px;
+    }
+    #songInfo #songArtist{
+        font-size: 15px;
+    }
+    
+    #volume{
+        right: 0px;
+        width: 35px;
+        height: 100px;
+        padding-top: 30px;
+        color: white;
+    }
+    #volume input{
+        -webkit-appearance: slider-vertical;
+        height: 75px;
+    }
+    #controls{
+        width: 200px;
+        height: 50px;
+        margin-top: 75px;
+    }
+    #positionControls{
+        width: 200px;
+        height: 100px;
+    }
+    #positionSlider{
+        width: 175px;
+    }
+    #buttonControls{
+        position: static;
+        bottom: 0px;
+        width: 200px;
+        height: 30px;
+        padding-bottom: 0px;
+        padding-top: 70px;
+    }
+    .abutton{
+        width: 30px;
+        height: 15px;
+        cursor: pointer;
+        margin: 10px;
+    }
+    #likedSongs .fa-heart{
+        
+    }
 }
