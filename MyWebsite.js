@@ -20,6 +20,7 @@ let currentSliderPosition = 0;
 let constantVolume = 0.6;
 let depth = 0;
 let startTimer;
+let playLikedPlayList = false;
 
 let getSongCover = document.getElementById("image");
 let getsongName = document.getElementById("songName");
@@ -35,6 +36,9 @@ let getplayButton = document.getElementById("playPause");
 let getSkip = document.getElementById("skip");
 let getautoPlay = document.getElementById("autoPlay");
 let getbackdropImg = document.getElementById("backdropImg");
+let defaultTab = document.getElementById("defaultTab");
+let likedTab = document.getElementById("heartedTab");
+let getSocials = document.getElementById("socials");
 
 let getplayIcon = getplayButton.querySelector(".fa-play");
 let getmuteIcon = getMute.querySelector(".fa-volume-high");
@@ -56,7 +60,36 @@ class AudioPlayer{
 
 window.addEventListener("load",()=>{
     window.alert("Click play to start.");
+    setUnderline(defaultTab);
+    
 })
+getSocials.addEventListener("click",()=>{
+    window.open("https://www.instagram.com/ramon.mnm/");
+})
+likedTab.addEventListener("click",()=>{
+    setUnderline(likedTab);
+    setUnderline(defaultTab);
+    playLikedPlayList = true;
+
+})
+
+defaultTab.addEventListener("click",()=>{
+    setUnderline(defaultTab);
+    setUnderline(likedTab);
+    playLikedPlayList = false;
+})
+
+function setUnderline(element){
+    if(element.style.textDecoration != "underline"){
+        element.style.textDecoration = "underline";
+        element.style.textDecorationColor = "#3535F3";
+    }
+    else{
+        element.style.textDecoration = "none";
+        element.style.textDecorationColor = "transparent";
+    }
+    
+}
 
 function selectSong(){
     randomIndex = Math.floor(Math.random() * objectList.length);
@@ -108,14 +141,27 @@ getSkip.addEventListener("click", async()=>{
 })
 
 async function setnextSong(){
-    if (depth == songList.length){
-        randomIndex = await Math.floor(Math.random() * objectList.length);
-        songList.push(objectList[randomIndex]);
-        return await new Audio(objectList[randomIndex].songId); // see if this gets rid of null songs
+    if(playLikedPlayList == true){
+        if (depth == songList.length){
+            randomIndex = await Math.floor(Math.random() * likedList.length);
+            songList.push(likedList[randomIndex]); // get songs from liked playlist
+            return await new Audio(likedList[randomIndex].songId); // see if this gets rid of null songs
+        }
+        else{
+            return new Audio(songList[depth].songId);
+        }
     }
     else{
-        return new Audio(songList[depth].songId);
+        if (depth == songList.length){
+            randomIndex = await Math.floor(Math.random() * objectList.length);
+            songList.push(objectList[randomIndex]);
+            return new Audio(objectList[randomIndex].songId); // see if this gets rid of null songs
+        }
+        else{
+            return new Audio(songList[depth].songId);
+        }
     }
+    
 }
 
 async function setprevSong(){
@@ -186,6 +232,12 @@ function setData(){
     getsongName.innerHTML = songList[currentIndex].songName;
     getartistName.innerHTML = songList[currentIndex].artistName;
     getSongCover.src = songList[currentIndex].songCover;
+    if(songList[currentIndex].isHearted == false){
+        getheartIcon.classList.replace("fa-solid","fa-regular");
+    }
+    else{
+        getheartIcon.classList.replace("fa-regular","fa-solid");
+    }
     
 }
 
@@ -214,18 +266,11 @@ function updateTrack(){
 
     myAudio.addEventListener("ended", async()=>{
         if(isSkip == true){
+            myAudio.pause();
             await clearInterval(startTimer);
             depth++;
-            myAudio.pause();
             myAudio = null;
-            if (depth == songList.length){
-                randomIndex = Math.floor(Math.random() * objectList.length);
-                songList.push(objectList[randomIndex]);
-                myAudio = await new Audio(objectList[randomIndex].songId); // see if this gets rid of null songs
-            }
-            else{
-                myAudio = await new Audio(songList[depth].songId);
-            }
+            myAudio = await setnextSong();
             myAudio.play();
             startTimer = setInterval(updateTrack,1000);
             setData();
@@ -244,7 +289,7 @@ getMute.addEventListener("click", ()=>{
     if(myAudio.volume > 0){
         myAudio.volume = 0;
         getVolume.value = 0;
-        getmuteIcon.classList.replace("fa-volume-high","fa-volume-xmark")
+        getmuteIcon.classList.replace("fa-volume-high","fa-volume-xmark");
         isMute = true;
     }
     else{
@@ -272,16 +317,19 @@ getlikedSongs.addEventListener("click", ()=>{
             objectList[randomIndex].isHearted = true;
             getheartIcon.classList.replace("fa-regular","fa-solid");
             gethearticonColor.style.color = "#3535F3";
+            likedList.push(objectList[randomIndex]);
+            console.log(likedList + "is list good");
+
             console.log(objectList[randomIndex].isHearted)
             console.log(objectList[randomIndex].songId)
         }
         else{
             objectList[randomIndex].isHearted = false;
-            console.log("randomIndex index false")
             getheartIcon.classList.replace("fa-solid","fa-regular");
             gethearticonColor.style.color = "white";
-            console.log(objectList[randomIndex].isHearted)
-            console.log(objectList[randomIndex].songId)
+            likedList.pop([likedList.length]); // last index of likedSongs
+             
+            console.log(likedList.length);
         }
     }
     else{
@@ -290,13 +338,14 @@ getlikedSongs.addEventListener("click", ()=>{
             songList[depth].isHearted = true;
             getheartIcon.classList.replace("fa-regular","fa-solid");
             gethearticonColor.style.color = "#3535F3";
-            console.log("current index true")
+            likedList.push(songList[depth]);
+
         }
         else{
             songList[depth].isHearted = false;
             getheartIcon.classList.replace("fa-solid","fa-regular");
             gethearticonColor.style.color = "white";
-            console.log("current index false")
+            likedList.pop(songList[depth]);
         }
     }
 })

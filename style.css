@@ -14,14 +14,13 @@
 }
 #navBar{
     position: absolute;
+    margin-top: 0;
     top: 0;
     width: 100%;
     height: 6%;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    bottom: 0;
-    box-shadow: 0px 20px 20px 1px rgb(0,0,0,0.4);
     z-index: auto;
 }
 #navBar::before{
@@ -34,9 +33,10 @@
     justify-content: space-between;
     justify-content: left;
     padding-left: 0%;
-    background: rgb(0,0,0,0.4);
-    
+    background: rgb(0,0,0,0.7);
+    filter: blur(3px);
 }
+
 #title{
     font-size: 25px;
     font-family: 'Quicksand', sans-serif;
@@ -44,10 +44,23 @@
     color: white;
     filter: brightness(120%);
 }
+
+#navBar ul li #defaultTab{
+    text-decoration: none;
+    text-decoration-color: transparent;
+    text-underline-offset: 0.2em;
+}
+#navBar ul li #heartedTab{
+    text-decoration: none;
+    text-decoration-color: transparent;
+    text-underline-offset: 0.2em;
+}
+
 #titleSpan{
     color: #3535F3;
 }
 #navBar ul li{
+    position: relative;
     list-style-type: none;
     padding-right: 20px;
     display: inline-block;
@@ -64,7 +77,13 @@
     color: #3535F3;
     transition: .3s;
 }
+
+@keyframes fade-in{
+    from{opacity: 0;}
+    to{opacity: 1;}
+}
 #socials{
+    position: relative;
     margin-right: 10%;
     border: none;
     border-radius: 30px;
@@ -78,6 +97,7 @@
     cursor: pointer;
     filter: brightness(120%);
 }
+
 #socials:hover{
     transform: scale(1.2);
 }
@@ -344,7 +364,7 @@
     }
     #wrapper{
         position: relative;
-        height: 450px;
+        height: 390px;
         width: 200px;
         box-shadow: 10px,40px,50px;
         z-index: auto;
@@ -380,6 +400,7 @@
         height: 100px;
         padding-top: 20px;
         color: white;
+        z-index: 50;
     }
     #volume input{
         -webkit-appearance: slider-vertical;
