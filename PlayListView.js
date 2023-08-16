@@ -98,7 +98,7 @@ class AudioPlayer{
 window.addEventListener("load",()=>{
     window.alert("Click play to start.");
     setUnderline(defaultTab);
-    document.body.style.backgroundImage = "url(AlbumCovers/JRAdnd3ORXM-HD.jpg)";
+    get_back_Drop.style.backgroundImage = "url(AlbumCovers/JRAdnd3ORXM-HD.jpg)";
     
 })
 getSocials.addEventListener("click",()=>{
