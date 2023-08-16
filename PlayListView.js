@@ -1,36 +1,32 @@
-
 let songName;
 let artistName;
 let songId;
 let songCover;
 let isHearted;
 let volume;
-let objectList = [""];
-let songList = [""];
-let likedList = [""];
+let objectList = [];
+let songList = [];
+let likedList = [];
 
 let myAudio = null;
 let songObject;
 let randomIndex;
 let collectrandomIndex;
-let isPlaying = null;
+let isPlaying = false;
 let isMute = false;
 let isSkip = true;
 let currentSliderPosition = 0;
 let constantVolume = 0.6;
 let depth = 0;
-let startTimer;
 let playLikedPlayList = false;
 
-let getSongCover = document.getElementById("image");
-let getsongName = document.getElementById("songName");
-let getartistName = document.getElementById("songArtist");
-let getVolume = document.querySelector("#volumeSlider");
-let getMute = document.getElementById("mute");
+
+
 let getstartTime = document.getElementById("startTime");
 let getpositionSlider = document.getElementById("positionSlider");
 let getendTime = document.getElementById("endTime");
 let getlikedSongs = document.getElementById("likedSongs");
+let getMute = document.getElementById("mute");
 let getprevSong = document.getElementById("prevSong");
 let getplayButton = document.getElementById("playPause");
 let getSkip = document.getElementById("skip");
@@ -39,25 +35,53 @@ let getbackdropImg = document.getElementById("backdropImg");
 let defaultTab = document.getElementById("defaultTab");
 let likedTab = document.getElementById("heartedTab");
 let getSocials = document.getElementById("socials");
+let get_music_Player = document.querySelector(".fa-chalkboard");
 
-let getplayIcon = getplayButton.querySelector(".fa-play");
-let getmuteIcon = getMute.querySelector(".fa-volume-high");
+let getplaybuttonIcon = getplayButton.querySelector(".fa-play");
 let getautoplayIcon = getautoPlay.querySelector(".fa-shuffle");
-let getheartIcon = getlikedSongs.querySelector(".fa-regular");
-let gethearticonColor = getlikedSongs.querySelector("#likedSongs .fa-heart");
-let getnextHTML = document.querySelector("#toggleplayList");
+let getmuteIcon = getMute.querySelector(".fa-volume-high");
+let gettabHearted; // hearted span element that changes.
+let get_liked_song; // actual heart icon that changes
+let get_liked_song_Icon;
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+// HEART IS FULL UNDER THE SHADOWS. CHECK ICONS Z INDEX IF NOT CHECK THE FOR LOOP.
+
+
+
+
 let y = 0;
 let counter = 0;
+let numTabs = 1;
+let myIndex;
+let myIndexes = [];
+let startTimer;
+let maxMinute;
+let maxSecond;
+let minute;
+let second;
+let getplayIcon;
+let universalIndex;
+let heartIndex;
+let prevbackDrop;
+let thisIndex;
+let playprevSong;
+let playfromIcon;
 
+let get_back_Drop = document.getElementById("backdrop");
 let getWrapper = document.querySelector(".wrapper");
+let getsongBar = document.querySelector(".songBar")
 let gettabnumberPlay = document.querySelector(".orderPlay");
 let gettabIcon = document.querySelector(".imageIcon");
+let getnameBox = document.querySelector(".nameBox")
 let gettabName = document.querySelector(".songName");
 let gettabartistName = document.querySelector(".artistName");
-let gettabHeart = document.querySelector(".heartButton")
+let gettabHeart = document.querySelector(".heartButton");
+let get_artist_name = document.querySelector("#artist_name");
+let get_song_name = document.querySelector("#song_name");
+
+
+
+
 
 class AudioPlayer{
     constructor(songName,artistName,songId,songCover,isHearted){
@@ -74,20 +98,23 @@ class AudioPlayer{
 window.addEventListener("load",()=>{
     window.alert("Click play to start.");
     setUnderline(defaultTab);
+    document.body.style.backgroundImage = "url(AlbumCovers/JRAdnd3ORXM-HD.jpg)";
     
 })
 getSocials.addEventListener("click",()=>{
     window.open("https://www.instagram.com/ramon.mnm/");
+    console.log("This should open insta")
+})
+
+get_music_Player.addEventListener("click",()=>{
+    window.open("index.html");
+    console.log("This should open index.html");
 })
 likedTab.addEventListener("click",()=>{
     setUnderline(likedTab);
     setUnderline(defaultTab);
     playLikedPlayList = true;
 
-})
-
-getnextHTML.addEventListener("click",()=>{
-    window.open("playlist.html");
 })
 
 defaultTab.addEventListener("click",()=>{
@@ -105,220 +132,373 @@ function setUnderline(element){
         element.style.textDecoration = "none";
         element.style.textDecorationColor = "transparent";
     }
+}
+
+window.addEventListener("load",() =>{
+    setStructure();
+})
+
+function setStructure(){
+    for (let i = 1; i < objectList.length; i++){
+        const newSongBar = document.createElement("div");
+        const newnumberPlay = document.createElement("a");
+        const newspanPlay = document.createElement("a");
+        const iconPlay = document.createElement("i");
+        const newtabIcon = document.createElement("img");
+        const newnamebox = document.createElement("div");
+        const newtabName = document.createElement("p")
+        const newtabArtist = document.createElement("p");
+        const newspanHeart = document.createElement("p");
+        const newtabHeart = document.createElement("i");
+
+        getWrapper.appendChild(newSongBar);
+        newSongBar.className = 'songBar';
+        newSongBar.appendChild(newnumberPlay);
+        newnumberPlay.className = 'orderPlay';
+        newnumberPlay.innerHTML = (i).toString();
+        newSongBar.appendChild(newspanPlay);
+        newspanPlay.className = "tabPlay";
+        newspanPlay.style.cursor = "pointer";
+        newspanPlay.appendChild(iconPlay);
+        iconPlay.classList = "fa-solid fa-play";
+        iconPlay.style.color = "#fff";
+        newSongBar.appendChild(newtabIcon);
+        newtabIcon.className = 'imageIcon';
+        newtabIcon.src = objectList[i].songCover;
+        newSongBar.appendChild(newnamebox);
+        newnamebox.className = 'nameBox'
+        newnamebox.appendChild(newtabName);
+        newtabName.className = 'songName';
+        newtabName.style.color = "#fff";
+        newtabName.innerHTML = objectList[i].songName;
+        newnamebox.appendChild(newtabArtist);
+        newtabArtist.className = 'artistName';
+        newtabArtist.style.color = "#fff";
+        newtabArtist.innerHTML = objectList[i].artistName;
+        newSongBar.appendChild(newspanHeart);
+        newspanHeart.className = 'spanHeart';
+        newspanHeart.style.cursor = 'pointer';
+        newspanHeart.appendChild(newtabHeart);
+        newtabHeart.classList = "fa-regular fa-heart";
+        newtabHeart.style.cursor = "pointer";
+        newtabHeart.style.color = "#fff";
+    } 
+    let newspanHeart = document.querySelectorAll(".spanHeart"); // heart icon in the tab
+    let gettabPlay = document.querySelectorAll(".tabPlay");
+  
     
-}
+    for (let i = 0; i < gettabPlay.length; i++){
+        console.log(myIndex);
+        gettabPlay[i].addEventListener("click",()=>{ 
+            if(myAudio ==null){
+                myIndex = i + 1;
+                myIndexes.push(myIndex);
+                console.log(myIndex);
+                console.log(myIndexes);
+                myAudio = new Audio(selectSong(myIndex));
+                songList.push(objectList[myIndex]);
+                myAudio.play();
+                setBackDrop(myIndex);
+                getplayIcon = gettabPlay[i].querySelector(".fa-play"); // gets the rigth tab to change play icon
+                getplayIcon.classList.replace("fa-play", "fa-pause");
+                getplaybuttonIcon.classList.replace("fa-play", "fa-pause"); // sets the playButton to pause
+                //get_back_Drop.src = setBackDrop(myIndex);
+                isPlaying = true;
+                volume = myAudio.volume;
+            }
+            else if((i + 1) != myIndex){
+                console.log("This is first i ----" + i);
+                myAudio.pause();
 
-function selectSong(){
-    randomIndex = Math.floor(Math.random() * objectList.length);
-    songList.push(objectList[randomIndex]);
-    songObject = objectList[randomIndex];
-    let songFile = songObject.songId;
-    myAudio = new Audio(songFile);
-}
+                // getplayIcon = gettabPlay[myIndexes[depth]].querySelector(".fa-play"); // may need to subtract one from index
+                getplayIcon.classList.replace("fa-pause","fa-play");
+                console.log(myIndexes[depth] + " this is the depth");
+                myIndex = i + 1;
+                console.log(myIndex);
+                myIndexes.push(myIndex);
+                playfromIcon = true;
+                myAudio = new Audio(selectSong(myIndex));
+                songList.push(objectList[myIndex]);
+                myAudio.play();
+                setBackDrop(myIndex);
+                console.log("This is i ---- " + i)
+                getplayIcon = gettabPlay[i].querySelector(".fa-play") // gets new tab to set the playbutton
+                getplayIcon.classList.replace("fa-play", "fa-pause");
+                // get_back_Drop.src = setBackDrop(myIndex);
+                console.log(i + " This is i")
+                depth++;
+                isPlaying = true;
+                console.log(myIndexes);
+                getplaybuttonIcon.classList.replace("fa-play", "fa-pause");
+            }
+            else if((i + 1) == myIndex && isPlaying == false){
+                myAudio.play();
+                getplayIcon.classList.replace("fa-play", "fa-pause");
+                isPlaying = true; // sets playing to true and sets icon to pause
+            }
+    
+            else{
+                myAudio.pause();
+                getplayIcon.classList.replace("fa-pause", "fa-play");
+                isPlaying = false; // sets playing to false and sets icon to play
+            }
+            setData(); // will establish data should be with timestarte the only thing called once clicked
+            startTimer = setInterval(updateTrack,1000); 
+            console.log("set interval should run");
+            
 
-getplayButton.addEventListener("click", async() =>{
-    if(myAudio == null){
-        selectSong();
-        await myAudio.play();
-        isPlaying = true;
-        getbackdropImg.src = songObject.songCover;
-        getplayIcon.classList.replace("fa-play","fa-pause");
-        getsongName.innerHTML = songObject.songName;
-        getartistName.innerHTML = songObject.artistName;
-        getSongCover.src = songObject.songCover;
-        startTimer = setInterval(updateTrack,1000);
-        depth++;
-        console.log(myAudio);
-    }
-    else if(isPlaying){
-        myAudio.pause();
-        isPlaying = false
-        getplayIcon.classList.replace("fa-pause","fa-play");
-        clearInterval(startTimer);
-        console.log("played");
-    }
-    else if(!isPlaying){
-        myAudio.play();
-        isPlaying = true;
-        getplayIcon.classList.replace("fa-play","fa-pause");
-        startTimer = setInterval(updateTrack,1000);
-        console.log("paused");
-    }
-})
+            // SHOULD REMOVE ALL FA-HEART AND JUST RELEY ON .FA-REUGLAR AND FA-SOLID
 
-getSkip.addEventListener("click", async()=>{
-    clearInterval(startTimer);
-    myAudio.pause();
-    depth++
-    myAudio = await setnextSong();
-    myAudio.play();
-    startTimer = setInterval(updateTrack,1000);
-    setData();
-    console.log(myAudio);
-})
+            getSkip.addEventListener("click",()=>{
+                console.log(depth + " this is depth");
+                console.log((myIndexes - 1) + " This is index lenght");
+                console.log("This should skip");
+                if(playLikedPlayList == false){
+                    if(depth == (myIndexes.length - 1)){
+                        clearInterval(startTimer);
+                        randomIndex = Math.floor(Math.random() * objectList.length);
+                        myAudio.pause();
+                        myAudio = new Audio(selectSong(randomIndex));
+                        myAudio.play();
+                        myIndexes.push(randomIndex);
+                        myIndex = randomIndex;
+                        setData(myIndex);
+                        setBackDrop(myIndex);
+                        startTimer = setInterval(updateTrack,1000);
+                        getplayIcon.classList.replace("fa-pause","fa-play"); // sets old tab playbutton to play
+                        getplayIcon = gettabPlay[randomIndex -1].querySelector(".fa-play"); // get new play button
+                        getplayIcon.classList.replace("fa-play", "fa-pause"); // sets new tab playbutton to pause;
+                        //get_back_Drop.src = setBackDrop(myIndex);
+                        
+                        isPlaying = true;
+                        depth++;
+                    }
+                    else{
+                        depth++;
+                        clearInterval(startTimer);
+                        myAudio.pause();
+                        myAudio = new Audio(selectSong(myIndexes[depth]));
+                        myAudio.play();
+                        myIndex = myIndexes[depth];
+                        setBackDrop(myIndex);
+                        setData();
+                        startTimer = setInterval(updateTrack,1000);
+                        getplayIcon.classList.replace("fa-pause","fa-play"); // sets old tab playbutton to play
+                        getplayIcon = gettabPlay[myIndexes[depth]].querySelector(".fa-play");
+                        getplayIcon.classList.replace("fa-play", "fa-pause"); // sets new tab playbutton to pause;
+                        //get_back_Drop.src = setBackDrop(myIndex);
+                        
+                        isPlaying = true;
+                    }
+                }
+                else{
+                    clearInterval(startTimer);
+                    thisIndex = Math.floor(Math.random() * likedList.length);
+                    let newEstablish = objectList.indexOf(likedList[thisIndex]);
+                    myAudio.pause();
+                    myAudio = new Audio(selectSong(thisIndex));
+                    myAudio.play();
+                    myIndexes.push(newEstablish);
+                    myIndex = newEstablish;
+                    setData(newEstablish);
+                    setBackDrop(newEstablish);
+                    startTimer = setInterval(updateTrack,1000);
+                    getplayIcon.classList.replace("fa-pause","fa-play"); // sets old tab playbutton to play
+                    getplayIcon = gettabPlay[newEstablish -1].querySelector(".fa-play"); // get new play button
+                    getplayIcon.classList.replace("fa-play", "fa-pause"); // sets new tab playbutton to pause;
+                    //get_back_Drop.src = setBackDrop(myIndex);
+                        
+                    isPlaying = true;
+                    depth++;
+                }
+                
+            })
 
-async function setnextSong(){
-    if(playLikedPlayList == true){
-        if (depth == songList.length){
-            randomIndex = await Math.floor(Math.random() * likedList.length);
-            songList.push(likedList[randomIndex]); // get songs from liked playlist
-            return await new Audio(likedList[randomIndex].songId); // see if this gets rid of null songs
-        }
-        else{
-            return new Audio(songList[depth].songId);
-        }
+            getprevSong.addEventListener("click",()=>{
+                if(depth > 0){
+                    depth--;
+                    playprevSong = true;
+                    clearInterval(startTimer);
+                    myAudio.pause();
+                    myAudio = new Audio(selectSong(myIndexes[depth]));
+                    myAudio.play();
+                    myIndex = (myIndexes[depth]);
+                    setBackDrop(myIndex);
+                    setData();
+                    startTimer = setInterval(updateTrack,1000);
+                    getplayIcon.classList.replace("fa-pause","fa-play"); // sets old tab playbutton to play
+                    getplayIcon = gettabPlay[myIndexes[depth] -1].querySelector(".fa-play");
+                    getplayIcon.classList.replace("fa-play", "fa-pause"); // sets new tab playbutton to pause;
+                    
+                    isPlaying = true;
+                }
+                else{
+                    myAudio.currentTime = 0;
+                    depth = 0;
+                    window.alert("No more prev songs");
+                }
+                
+            })
+            
+        
+            function setData(){
+                get_artist_name.innerHTML = set_artist_Name(myIndex)
+                get_song_name.innerHTML = set_song_Name(myIndex);
+            }
+            function updateTrack(){
+                getpositionSlider.value = myAudio.currentTime
+                getpositionSlider.max = myAudio.duration;
+                getpositionSlider.min = 0;
+
+                maxMinute = Math.floor(myAudio.duration / 60);
+                maxSecond = Math.floor(myAudio.duration % 60);
+                minute = Math.floor(myAudio.currentTime / 60);
+                second = Math.floor(myAudio.currentTime % 60);
+
+                maxMinute = pad(maxMinute);
+                maxSecond = pad(maxSecond);
+                minute = pad(minute);
+                second = pad(second);
+
+                getstartTime.innerHTML = minute + ":" + second;
+                getendTime.innerHTML = maxMinute + ":" + maxSecond;
+
+                function pad(time){
+                    return ("0" + time).length > 2 ? time : "0" + time;
+                }
+                myAudio.addEventListener("ended",()=>{
+                    console.log("Does code still run????????")
+                    if(playLikedPlayList == false){
+                        if(isSkip && depth == (myIndexes.length - 1)){
+                            clearInterval(startTimer);
+                            randomIndex = Math.floor(Math.random() * objectList.length);
+                            myAudio.pause();
+                            myAudio = new Audio(selectSong(randomIndex));
+                            myAudio.play();
+                            myIndexes.push(randomIndex);
+                            myIndex = randomIndex;
+                            setBackDrop(myIndex);
+                            setData(myIndex);
+                            startTimer = setInterval(updateTrack,1000);
+                            getplayIcon.classList.replace("fa-pause","fa-play"); // sets old tab playbutton to play
+                            getplayIcon = gettabPlay[randomIndex -1].querySelector(".fa-play"); // get new play button
+                            getplayIcon.classList.replace("fa-play", "fa-pause"); // sets new tab playbutton to pause;
+                            depth++;
+                            
+                            console.log(get_back_Drop);
+                            isPlaying = true;
+                        }
+                        else if(isSkip && depth != (myIndexes.length -1)){
+                            depth++;
+                            clearInterval(startTimer);
+                            myAudio.pause();
+                            myAudio = new Audio(selectSong(myIndexes[depth]));
+                            myAudio.play();
+                            myIndex = myIndexes[depth]; // just switched
+                            setBackDrop(myIndex);
+                            setData();
+                            startTimer = setInterval(updateTrack,1000);
+                            getplayIcon.classList.replace("fa-pause","fa-play"); // sets old tab playbutton to play
+                            getplayIcon = gettabPlay[myIndexes[depth]].querySelector(".fa-play");
+                            getplayIcon.classList.replace("fa-play", "fa-pause"); // sets new tab playbutton to pause;
+                            isPlaying = true;
+                        }
+                        else{
+                            myAudio.pause();
+                            clearInterval(startTimer);
+                            myAudio.currentTime = 0;
+                            myAudio.play();
+                            startTimer = setInterval(updateTrack,1000);
+                            isPlaying = true;
+                        }
+                    }
+                    else if (playLikedPlayList == true && isSkip){
+                        clearInterval(startTimer);
+                        thisIndex = Math.floor(Math.random() * likedList.length);
+                        let newEstablish = objectList.indexOf(likedList[thisIndex]);
+                        myAudio.pause();
+                        myAudio = new Audio(selectSong(thisIndex));
+                        myAudio.play();
+                        myIndexes.push(newEstablish);
+                        myIndex = newEstablish;
+                        setData(newEstablish);
+                        setBackDrop(newEstablish);
+                        startTimer = setInterval(updateTrack,1000);
+                        getplayIcon.classList.replace("fa-pause","fa-play"); // sets old tab playbutton to play
+                        getplayIcon = gettabPlay[newEstablish -1].querySelector(".fa-play"); // get new play button
+                        getplayIcon.classList.replace("fa-play", "fa-pause"); // sets new tab playbutton to pause;
+                        //get_back_Drop.src = setBackDrop(myIndex);
+                        
+                        isPlaying = true;
+                        depth++;
+                    }
+                    else{
+                        clearInterval(startTimer);
+                        myAudio.currentTime = 0;
+                        myAudio.play();
+                        startTimer = setInterval(updateTrack,1000);
+                        isPlaying = true;
+                    }
+                    
+                    
+                })
+            }
+            
+            // need to set data to play bar and update the track
+        })
+        newspanHeart[i].addEventListener("click",()=>{
+            console.log(objectList[i + 1].songId + "this should change heart");  
+            if(objectList[i + 1].isHearted == false){
+                heartIndex = i + 1; 
+                get_liked_song = newspanHeart[i].querySelector(".spanHeart .fa-regular");
+                get_liked_song_Icon = newspanHeart[i].querySelector(".spanHeart .fa-heart")
+                get_liked_song_Icon.style.color = "#3535F3";
+                get_liked_song.classList.replace("fa-regular","fa-solid");
+                objectList[heartIndex].isHearted = true;
+                likedList.push(objectList[heartIndex]);
+
+                console.log(objectList[heartIndex].isHearted)
+                console.log(likedList);
+            }
+            else{
+                heartIndex = i + 1; 
+                get_liked_song = newspanHeart[i].querySelector(".spanHeart .fa-solid");
+                get_liked_song_Icon = newspanHeart[i].querySelector(".spanHeart .fa-heart")
+                get_liked_song_Icon.style.color = "#fff";
+                get_liked_song.classList.replace("fa-solid","fa-regular")
+                objectList[heartIndex].isHearted = false;
+                likedList.pop(objectList[i]);
+        
+                console.log(objectList[i].isHearted)
+                console.log(likedList);
+            }   
+        })
     }
-    else{
-        if (depth == songList.length){
-            randomIndex = await Math.floor(Math.random() * objectList.length);
-            songList.push(objectList[randomIndex]);
-            return new Audio(objectList[randomIndex].songId); // see if this gets rid of null songs
-        }
-        else{
-            return new Audio(songList[depth].songId);
-        }
     }
     
-}
-
-async function setprevSong(){
-    if (depth >= 0){
-        return new Audio(songList[depth].songId);
-    }
-    else{
-        window.alert("No previous songs.");
-        depth = 0;
-        return new Audio(songList[depth].songId);
-    }
-}
-
-getprevSong.addEventListener("click", async()=>{
-    clearInterval(startTimer);
-    myAudio.pause();
-    depth--;
-    myAudio = await setprevSong();
-    console.log(myAudio)
-    myAudio.play();
-    startTimer = setInterval(updateTrack,1000);
-    setData();
-})
-
-getpositionSlider.addEventListener("click", () => {
-    currentSliderPosition = getpositionSlider.value;
+getpositionSlider.addEventListener("click",()=>{
     myAudio.currentTime = getpositionSlider.value;
 })
 
-getVolume.addEventListener("click", ()=>{
-    constantVolume = getVolume.value * 0.01;
-    myAudio.volume = constantVolume;
-    if(myAudio.volume > 0){
-        if(isMute){
-            isMute = false;
-            getmuteIcon.classList.replace("fa-volume-xmark","fa-volume-high");
-        }
-    }
-    else if(myAudio.volume < 0.01){
-        isMute = true;
-        getmuteIcon.classList.replace("fa-volume-high","fa-volume-xmark")
-    }
-})
-
-function setData(){
-    let currentIndex;
-    if(depth == songList.length)
-    {
-        currentIndex = randomIndex;
+getplayButton.addEventListener("click",()=>{
+    if (isPlaying){
+        myAudio.pause();
+        getplaybuttonIcon.classList.replace("fa-pause","fa-play");
+        getplayIcon.classList.replace("fa-pause", "fa-play");
+        isPlaying = false;
     }
     else{
-        currentIndex = depth;
-    }
-    isPlaying = true;
-    currentSliderPosition = 0;
-    myAudio.currentTime = 0;
-    if(!isMute){
-        myAudio.volume = constantVolume;
-        getVolume.value = constantVolume * 100;
-    }
-    else{
-        myAudio.volume = 0;
-        getVolume.value = 0;
-    }
-    isPlaying = true;
-    getbackdropImg.src = songList[currentIndex].songCover;
-    getplayIcon.classList.replace("fa-play","fa-pause");
-    getsongName.innerHTML = songList[currentIndex].songName;
-    getartistName.innerHTML = songList[currentIndex].artistName;
-    getSongCover.src = songList[currentIndex].songCover;
-    if(songList[currentIndex].isHearted == false){
-        getheartIcon.classList.replace("fa-solid","fa-regular");
-    }
-    else{
-        getheartIcon.classList.replace("fa-regular","fa-solid");
-    }
-    
-}
-
-function updateTrack(){
-    getpositionSlider.max = myAudio.duration;
-    getpositionSlider.min = 0;
-
-    let maxMinute = Math.floor(myAudio.duration / 60);
-    let maxSecond = Math.floor(myAudio.duration % 60);
-    let minutes = Math.floor(myAudio.currentTime / 60);
-    let seconds = Math.floor(myAudio.currentTime % 60);
-    maxMinute = pad(maxMinute);
-    maxSecond = pad(maxSecond);
-    minutes = pad(minutes);
-    seconds = pad(seconds);
-
-    getendTime.innerHTML = maxMinute + ":" + maxSecond;
-    getstartTime.innerHTML = minutes + ":" + seconds;
-
-    currentSliderPosition++;
-    getpositionSlider.value = currentSliderPosition;
-
-    function pad(time){
-        return ("0" + time).length > 2 ? time : "0" + time;
-    }
-
-    myAudio.addEventListener("ended", async()=>{
-        if(isSkip == true){
-            myAudio.pause();
-            await clearInterval(startTimer);
-            depth++;
-            myAudio = null;
-            myAudio = await setnextSong();
-            myAudio.play();
-            startTimer = setInterval(updateTrack,1000);
-            setData();
-        }
-        else{
-            currentSliderPosition = 0;
-            getpositionSlider.value = 0;
-            myAudio.currentTime = 0;
-            await myAudio.play(); 
-        }
-        
-    })
-}
-
-getMute.addEventListener("click", ()=>{
-    if(myAudio.volume > 0){
-        myAudio.volume = 0.0;
-        getVolume.value = 0;
-        getmuteIcon.classList.replace("fa-volume-high","fa-volume-xmark");
-        isMute = true;
-    }
-    else{
-        myAudio.volume = constantVolume;
-        getVolume.value = constantVolume * 100;
-        getmuteIcon.classList.replace("fa-volume-xmark","fa-volume-high");
-        isMute = false;
-    }
+        myAudio.play();
+        console.log("This audio should play");
+        getplaybuttonIcon.classList.replace("fa-play","fa-pause");
+        getplayIcon.classList.replace("fa-play", "fa-pause");
+        isPlaying = true;
+    } 
+    // need to establish button contorls, slider positon, and hearted songs
 })
 
 getautoPlay.addEventListener("click",()=>{
-    if(isSkip == true){
+    if(isSkip){
         getautoplayIcon.classList.replace("fa-shuffle","fa-rotate-left");
         isSkip = false;
     }
@@ -328,61 +508,61 @@ getautoPlay.addEventListener("click",()=>{
     }
 })
 
-getlikedSongs.addEventListener("click", ()=>{
-    if(depth == songList.length){
-        if(objectList[randomIndex].isHearted == false){
-            objectList[randomIndex].isHearted = true;
-            getheartIcon.classList.replace("fa-regular","fa-solid");
-            gethearticonColor.style.color = "#3535F3";
-            likedList.push(objectList[randomIndex]);
-            console.log(likedList + "is list good");
-
-            console.log(objectList[randomIndex].isHearted)
-            console.log(objectList[randomIndex].songId)
-        }
-        else{
-            objectList[randomIndex].isHearted = false;
-            getheartIcon.classList.replace("fa-solid","fa-regular");
-            gethearticonColor.style.color = "white";
-            likedList.pop([likedList.length]); // last index of likedSongs
-             
-            console.log(likedList.length);
-        }
+getMute.addEventListener("click",()=>{
+    if(isMute){
+        getmuteIcon.classList.replace(".fa-volume-high",".fa-volume-xmark");
+        myAudio.volume = 0;
+        isMute = false;
+        console.log("This should not mute");
     }
     else{
-        if(songList[depth].isHearted == false) // current index because audio is in past
-        {
-            songList[depth].isHearted = true;
-            getheartIcon.classList.replace("fa-regular","fa-solid");
-            gethearticonColor.style.color = "#3535F3";
-            likedList.push(songList[depth]);
-
-        }
-        else{
-            songList[depth].isHearted = false;
-            getheartIcon.classList.replace("fa-solid","fa-regular");
-            gethearticonColor.style.color = "white";
-            likedList.pop(songList[depth]);
-        }
+        getmuteIcon.classList.replace(".fa-volume-xmark",".fa-volume-high")
+        myAudio.volume = volume;
+        isMute = true;
+        console.log("This should mute");
     }
 })
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-window.addEventListener("load",() =>{
-    settabNumbers();
-})
-
-function settabNumbers(){
-    counter = getWrapper.childElementCount();
-    console.log("child count" + counter);
-    gettabName.innerHTML = `${counter}`;
+function selectSong(index){
+    if(playLikedPlayList == false){
+        songList.push(objectList[index]);
+        return objectList[index].songId;
+    }
+    else{
+        if(playprevSong){
+            playprevSong = false;
+            return objectList[index].songId
+        }
+        else if(playfromIcon){
+            playfromIcon = false;
+            songList.push(objectList[index]);
+            return objectList[index].songId;
+        }
+        else{
+            songList.push(likedList[thisIndex]);
+            return likedList[thisIndex].songId;
+        }
+    }
+    
 }
+
+function setpositionControls(){
+    getpositionSlider.max = myAudio.duration;
+    getstartTime.innerHTML = "0";
+    getendTime.innerHTML = myAudio.duration.toString();
+}
+function set_artist_Name(index){
+    return objectList[index].artistName;
+}
+function set_song_Name(index){
+    return objectList[index].songName;
+}
+
+function setBackDrop(index){
+    console.log("0000000000000000000000" + " " + `"url('${objectList[index].songCover}')"`)
+    get_back_Drop.style.backgroundImage = `url('${objectList[index].songCover}')`;
+}
+
 
 
 let song = new AudioPlayer("Llkd","Dudylo","MusicWebsite/Llkd.mp3","AlbumCovers/artwork (copy 41).jpg");
@@ -393,7 +573,7 @@ let song4 = new AudioPlayer("4148 (feat. Edot Babyy)","DD Osama,Edot Babyy,Lawsy
 let song5 = new AudioPlayer("AFRICAN DEMONS PT2","Yus Gz,Scotty 2 Hotty,Nesty Floxks,Ab Da Jet","MusicWebsite/AFRICAN DEMONS PT2.mp3","AlbumCovers/artwork (copy 5).jpg");
 let song6 = new AudioPlayer("B-Lovee - Freestyle - Open Mic","B-lovee","MusicWebsite/B-Lovee - Freestyle - Open Mic.mp3","AlbumCovers/artwork (copy 6).jpg");
 let song7 = new AudioPlayer("BACKDOOR","Yus Gz","MusicWebsite/BACKDOOR.mp3","AlbumCovers/artwork (copy 7).jpg");
-let song8 = new AudioPlayer("Beam","Kyle Richh,Mike Myerzz","","AlbumCovers/artwork (copy 8).jpg");
+let song8 = new AudioPlayer("Beam","Kyle Richh,Mike Myerzz","MusicWebsite/Beam.mp3","AlbumCovers/artwork (copy 8).jpg");
 let song9 = new AudioPlayer("Big Time Rush","BigKayBeezy","MusicWebsite/Big Time Rush.mp3","AlbumCovers/artwork (copy 9).jpg");
 let song10 = new AudioPlayer("Box","Sha EK,Defiant Presents","MusicWebsite/Box.mp3","AlbumCovers/artwork (copy 10).jpg");
 let song11 = new AudioPlayer("BREAKIN THE CODE","Kyle Richh","MusicWebsite/BREAKIN THE CODE.mp3","AlbumCovers/artwork (copy 11).jpg","AlbumCovers/artwork (copy 11).jpg");
@@ -548,7 +728,7 @@ let song157 = new AudioPlayer("ONNAT","JStar Balla,Sugarhill Tj,Reese Loc","Musi
 let song158 = new AudioPlayer("Poppa Perry","Sha Gz","MusicWebsite/Poppa Perry.mp3","AlbumCovers/artwork (copy 184).jpg");
 let song159 = new AudioPlayer("Pray For Us","ReyFlock Gz,Sha EverythingK,BDOT Goon","MusicWebsite/Pray For Us.mp3","AlbumCovers/artwork (copy 185).jpg");
 let song161 = new AudioPlayer("Ready 4 War","Edot Babyy","MusicWebsite/Ready 4 War.mp3","AlbumCovers/artwork (copy 186).jpg");
-let song162 = new AudioPlayer("READY","BLOODIE","MusicWebsite/READY.mp3","AlbumCovers/artwork (copy 187).jpg","");
+let song162 = new AudioPlayer("READY","BLOODIE","MusicWebsite/READY.mp3","AlbumCovers/artwork (copy 187).jpg");
 let song163 = new AudioPlayer("Shake It (feat. Cardi B, Dougie B & Bory300)","Kay Flock,Cardi B,Dougie B,Bory300","MusicWebsite/Shake It (feat. Cardi B, Dougie B & Bory300).mp3","AlbumCovers/artwork (copy 188).jpg");
 let song164 = new AudioPlayer("Supa Sitchy","Kenzo Balla","MusicWebsite/Supa Sitchy.mp3","AlbumCovers/artwork (copy 189).jpg");
 let song165 = new AudioPlayer("Taco","C Blu,M1 Reaper,Cito Blicc","MusicWebsite/Taco.mp3","AlbumCovers/artwork (copy 190).jpg");
@@ -558,10 +738,3 @@ let song168 = new AudioPlayer("Upnow (feat. Coi Leray)","DD Osama,Coi Leray","Mu
 let song169 = new AudioPlayer("We Back Pt. 2","Edot Babyy,Dee Play4Keeps","MusicWebsite/We Back Pt. 2.mp3","AlbumCovers/artwork (copy 194).jpg");
 let song170 = new AudioPlayer("Autograph","Juice WRLD","MusicWebsite/Juice WRLD .mp3","AlbumCovers/JRAdnd3ORXM-HD.jpg");
 let song171 = new AudioPlayer("734 OG","Juice WRLD","MusicWebsite/Juice WRLD - 734 (OG).mp3","AlbumCovers/emIsJ-czz5I-HD.jpg");
-
-
-
-
-
-
-

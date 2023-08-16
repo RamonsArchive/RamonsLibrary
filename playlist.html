@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="playliststyle.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://kit.fontawesome.com/65babb9445.js" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="backdrop"></div>
+    <div id="topBar">
+        <h1 id="title">the<span id="titleSpan">stu</span>.one</h1>
+            <ul>
+                <li ><a class = "toplist" id="defaultTab" href="#">Default</a></li>
+                <li ><a class = "toplist"id="heartedTab" href="#">Hearted </a></li>
+            </ul>
+            <i class="fa-solid fa-chalkboard"></i>
+            <button id="socials"> Socials</button>
+    </div>
+    <div class="wrapper">
+    </div>
+    <div id="controls">
+        <div id="songInfo">
+            <p class="song_info" id="song_name">Song name </p><br>
+            <p class="song_info" id="artist_name">Artist name </p>
+        </div>
+        <div id="positionControls">
+            <sub id="startTime">start</sub>
+            <input type="range" id="positionSlider" value="0">
+            <sub id="endTime">end</sub>
+        </div>
+        <div id="buttonControls">
+            <button id="mute" class="abutton"><i class="fa-solid fa-volume-high"></i></button>
+            <button id="prevSong" class="abutton"><i class="fa-solid fa-backward"></i> </button>
+            <button id="playPause" class="abutton"><i class="fa-solid fa-play"></i> </button>
+            <button id="skip" class="abutton"> <i class="fa-solid fa-forward"></i> </button>
+            <button id="autoPlay" class="abutton"> <i class="fa-solid fa-shuffle"></i></button>
+        </div>  
+    </div>
+
+    <script src="PlayListView.js" type="module"> </script>
+</body>
+</html>
